@@ -662,6 +662,82 @@ Elle est définie par un nom, une liste d'arguments. Elle peut retourner un rés
 
 ## Les classes et ce qui va avec
 
+### Un objet
+
+Un objet est un type de variable. On l'a déjà vu avec `new \DateTime` précédemment pour la manipulation de date.
+
+Il est composé de propriétés, qui vont stocker des valeurs, et des méthodes, qui vont manipuler des données.
+
+Créer simplement un objet :
+
+```php
+<?php
+
+	$user = new \stdClass();
+	$user->name = 'John Doe';
+	$user->age = 21;
+
+	echo $user->age;
+
+	$user->age = 35;
+
+	echo $user->age;
+
+	var_dump($user);
+
+ ?>
+```
+
+On va souvent utiliser un objet pour représenter un concept. On va grouper des valeurs et des fonctionnalités qui ont un rapport avec ce concept, pour pouvoir les gérer ensemble, mieux se les représenter, ...
+ 
+
+### Une classe
+
+```php
+<?php
+
+	class User{
+		private $name;
+		private $age;
+
+		public function __construct(int $age){
+			$this->age = $age;
+		}
+
+		public function getAge(): int {
+			return $this->age;
+		}
+
+		public function setAge(int $age): self {
+			$this->age = $age;
+			return $this;
+		}
+
+		
+		public function getName(): string {
+			return $this->name;
+		}
+
+		public function setName(string $name): self {
+			$this->name = $name;
+			return $this;
+		}
+
+		public function isUnderAge(): bool {
+			return $this->age < 21;
+		}
+
+		public function happyBirthday(): string {
+			$this->age++;
+
+			return "Happy birthday " . $this->name . ", you are now " . $this->age . " years old.";
+		}	
+	}
+ ?>
+```
+
+### Utiliser une classe
+
 ## Le PHPDoc
 
 Un commentaire écrit dans un format particulier qui peut aider les développeurs et est utilisé par des outils tiers.
