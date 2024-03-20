@@ -42,6 +42,11 @@ Exemple : test fonctionnel qui vérifie que le user est connecté, a suffisammen
 
 ## L'intérêt de faire du TDD
 
+ * on est contraint de ne pas écrire de nouvelles fonctions sans tests
+ * on colle au plus près les specs
+ * on risque moins d'oublier des fonctionnalités
+ * on est plus confiant sur le code écrit
+
 ## Description du TDD
 
 ### Développement classique

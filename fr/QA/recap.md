@@ -2,12 +2,13 @@
 
 ## Sommaire 
 
- 1. [Définition](#définition)
- 2. [Quand intégrer la QA ?](#quand-intégrer-la-qa)
- 3. [Qui intervient ?](#qui-intervient)
- 4. [Les protocoles de test](#les-protocoles-de-test)
- 5. [Analyse et audit](#analyse-et-audit)
- 6. [Automatiser avec la CI/CD](#automatiser-avec-la-cicd)
+ 1. [Définition](#1-définition)
+ 2. [Quand intégrer la QA ?](#2-quand-intégrer-la-qa)
+ 3. [Qui intervient ?](#3-qui-intervient)
+ 4. [Les protocoles de test](#4-les-protocoles-de-test)
+ 5. [Analyse et audit](#5-analyse-et-audit)
+ 6. [Automatiser avec la CI/CD](#6-automatiser-avec-la-cicd)
+ 7. [Installation des outils](#7-installation-des-outils)
 
 ## 1. Définition
 
@@ -27,7 +28,9 @@ La QA intervient tout au long de la vie d'un produit. C'est un processus proacti
 
 ### a. Les développeur.ses
 
-Les développeurs et développeuses vont 
+Les développeurs et développeuses doivent dans la théorie tester leur code et fournir des scénarios reproductibles pour que d'autres puissent tester également. Les tests peuvent avoir lieu pendant le développement d'une fonctionnalité, une fois qu'elle est développée, et avant de l'intégrer au reste de l'application. 
+
+Le plus souvent, ces tests sont codés et sont versionnés, de la même manière que le reste du programme. Cela permet de tenir un historique et de suivre le évolutions du code et des tests. Cela permet aussi de pouvoir automatiser l'exécution des tests.
 
 ### b. Les utilisateur.rices
 
@@ -35,11 +38,19 @@ D'une certaine manière, toutes les personnes qui utilisent un programme font pa
 
 ### c. Les QA
 
-On peut assigner le rôle d'ingénieur QA à certaines personnes d'une équipe technique. Ce seront les référent.es 
+On peut assigner le rôle d'ingénieur QA à certaines personnes d'une équipe technique. Ce seront les référent.es fonctionnels de l'application. Les QAs vont intervenir le plus souvent à la fin du développement d'une fonctionnalité et avant qu'elle soit intégrée au reste du programme. Mais également avant des livraisons importantes en production, pour s'assurer que le produit final correspond aux attentes du client.
 
 ## 4. Les protocoles de test
 
 ### a. Les tests manuels
+
+Les tests manuels sont les plus simples à réaliser. En contrepartie, il est assez difficile d'être rigoureux avec. On aura du mal à 
+ - estimer la couverture des tests (quelles fonctionnalités sont testées)
+ - savoir comment réaliser les tests
+ - savoir comment générer des jeux de tests
+ - garder un historique des évolutions des méthodes de tests
+ - prouver que le test réalisé correspond aux attentes
+ - prouver que le test a été réalisé 
 
 ### b. Les tests unitaires
 
@@ -174,17 +185,55 @@ Pour éviter d'écrire un nouveau test par verbe, on utilise ici un `dataProvide
 
 Dans cet exemple, nous aurons donc le test `test_getUsers_checkAuthorizedMethods` qui sera lancé une fois avec `$method = 'PUT`, une fois avec $method = 'DELETE`, etc
 
+**Avec Postman comme client API**
+
+
+
 ### d. Les tests E2E
 
 Définition : tester le comportement d'un scénario, d'un use case, de l'application
 
 Exemple : tester la redirection après la connexion à l'application web
 
+**En JS avec Playwright**
+
+Pour cet exemple, nous allons utiliser la page de recherche [google](https://www.google.com) et tester qu'une redirection de page a lieu.
+
+```ts
+import { test, expect } from '@playwright/test';
+
+test('assert search redirect to search page', async ({ page }) => {
+  await page.goto('https://www.google.com'); //se rendre sur la page à tester
+
+  await page.getByRole('textarea').click(); //simuler un clic souris sur un élément html
+  await page.getByRole('textarea').fill('bulbasaur'); //remplir un champs input avec du text
+  
+  await page.getByRole('input', { value: 'Recheche Google' }).click(); //cliquer sur un élément html
+  await expect(page.getByRole('textarea')).toContainText('bulbasaur'); //attendre une redirection vers une nouvelle page, et tester que la nouvelle page contienne une balise avec un certains texte
+});
+```
+
+On peut générer des tests avec [l'extension de VS code](https://playwright.dev/docs/codegen#record-a-new-test). Une nouvelle fenêtre de navigateur va s'ouvrir, et l'extension va enregistrer les actions réalisées sur cette fenêtre pour écrire un test. On pourra ensuite les modifier si besoin pour davantage correspondre aux specs attendues
+
+**Avec l'extension chrome Selenium IDE**
+
+L'écriture de tests avec Selemiun IDE se fait de la même manière que la génération de Playwright.
+
+**Quel outil utiliser ?**
+
+Si on souhaite rapidement tester, et si on n'est pas à l'aise avec l'écriture manuelle de tests, on peut préférer Selenium.
+
+Cependant, il sera plus compliqué d'automatiser des tests avec. Dans ce cas on pourra utiliser Playwright. De plus Playwright permet de lancer la même suite de testes sur différents navigateurs desktops (chrome, safari, firefox, edge, ...) mais également mobiles. On peut ainsi vérifier que l'application web a le même comportement quel que soit le support. Enfin, il sera plus simple de lancer plusieurs fois le même test avec des données différentes (principe de dataProvider) avec Playwright et des tests codés, plutôt qu'avec Selenium.
+
 ### e. Les tests de performance
 
 Définition : tester quelles sont les limites d'une application en terme de flux
 
 Exemple : vérifier qu'une page web tienne 1000 utilisateurs
+
+**Avec Apache JMeter**
+
+Une fois installé, lancer le logiciel (dans `/bin/jmeter.bat` pour windows ou dans `/bin/jmeter.sh` pour mac et linux).
 
 ## 5. Analyse et audit
 
@@ -273,3 +322,126 @@ Les 3 vont analyser l'url renseignée et tester le site sur 5 critères :
 
 ## 6. Automatiser avec la CI/CD
 
+La CI/CD, pour Continued Integration, Continued Deployment, permet d'automatiser comme son nom l'indique l'intégration de nouvelles fonctionnalités à un programme et de les déployer automatiquement.
+
+Nous allons nous concentrer sur la partie CI avec Github Actions.
+
+Github Actions est un outil gratuit de Github qui permet de lancer des workflows lorsqu'on intéragit avec un repository. Pour rajouter un workflow à un repository existant, il suffit d'y créer un dossier `/.github/workflows`. A l'intérieur de ce dossier, vous pourrez ajouter autant de workflows différents (exemple : un pour lancer les tests unitaires quand on merge sur une branche A, lancer le déploiement quand on merge sur une branche B, etc).
+
+Prenons l'exemple d'une application php : 
+
+```yaml
+name: Symfony #nom de votre workflow
+
+on: # quelles actions vont déclencher le workflow
+  push:
+    branches: [ "master", "phpstan" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs: # quels sous-workflows vont être exécutés
+  symfony-tests:
+    runs-on: ubuntu-latest # sur quel environnement lancer le sous-workflow
+    steps:
+    - uses: shivammathur/setup-php@2cb9b829437ee246e9b3cac53555a39208ca6d28 # mise en place d'un environnement php
+      with:
+        php-version: '8.1'
+    - uses: actions/checkout@v3
+    - name: Copy .env.test.local
+      run: php -r "file_exists('.env.test.local') || copy('.env.test', '.env.test.local');"
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+    - name: Install Dependencies # installation des dépendances selon le composer.json
+      run: composer install
+    - name: Create Database # mise en place d'une bdd de tests
+      run: |
+        mkdir -p data
+        touch data/database.sqlite
+
+    - name: Execute linter via PHPStan # exécution de l'analyse statique
+      run: vendor/bin/phpstan analyse
+
+    - name: Execute tests (Unit and Feature tests) via PHPUnit # exécution des tests unitaires et fonctionnels
+      env:
+        DATABASE_URL: sqlite:///%kernel.project_dir%/data/database.sqlite
+      run: vendor/bin/phpunit
+```
+
+Un workflow se découpe en sous-workflows, qui peuvent être exécutés les uns à la suite des autres ou en parallèle. Ici il n'y a qu'un sous workflow.
+
+Un sous-workflow se découpe en étapes. Chaque étape commence par un `uses`, si on réutilise une étape fournie par un.e membre de la communauté, ou par un `name` si on souhaite lancer une étape custom. Si une étape échoue, le workflow s'arrête et remonte une erreur.
+
+Le scénario principal et idéal se déroule comme cela : 
+ - une nouvelle fonctionnalité est demandée
+ - on va créer une nouvelle branche depuis la branche principale (master, main, prod, develop, etc) pour y développer la fonctionnalité
+ - une fois la fonctionnalité terminée, on fait une pull request de notre branche de développement vers la branche principale
+ - on déclenche un ou plusieurs workflows pour la QA (tests unitaires/fonctionnels, analyse statique, audit lighthouse, ...)
+ - si une étape du workflow échoue, on empêche de merger et on protège le programme de subir une régression
+
+## 7. Méthodologie du TDD
+
+Définition : 
+ 1. écrire des tests simples
+ 2. lancer les tests
+ 3. constater les tests qui échouent
+ 4. écrire du code pour faire passer les tests
+ 5. lancer les tests
+ 6. constater que les tests passent
+ 7. recommencer jusqu'à ce que la fonctionnalité corresponde aux specs
+
+## 8. Installation des outils
+
+### PHPUnit
+
+Vous devez avoir l'outil de gestion de dépendances `composer` d'installé. Lancez la commande : 
+
+```bash
+composer require --dev phpunit/phpunit
+```
+
+Vous aurez un fichier de configuration `phpunit.xml.dist`. Pour en savoir plus sur les configurations possibles, suivre [ce lien](https://docs.phpunit.de/en/11.0/configuration.html)
+
+Les tests seront écrits dans le dossier `/tests`
+
+### Vitest
+
+Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé. Lancez la commande :
+
+```bash
+npm i -D vitest
+```
+
+### Playwright
+
+Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé. Lancez la commande :
+
+```bash
+npm init playwright@latest
+```
+
+Pour ensuite installer les navigateurs qui serviront à l'exécution des tests, lancer : 
+
+```bash
+npx playwright install
+```
+
+Vous aurez un fichier de configuration `playwright.config.ts`. Pour en savoir plus sur les configurations possibles, suivre [ce lien](https://playwright.dev/docs/test-configuration)
+
+### Selenium IDE
+
+Vous devez avoir un navigateur compatible avec les extensions chrome. L'installation se fait via [ce lien](https://chromewebstore.google.com/detail/selenium-ide/mooikfkahbdckldjjndioackbalphokd)
+
+### Apache JMeter
+
+Vous devez avoir installé Java sur votre poste. Suivre [ce lien](https://www.java.com/en/download/manual.jsp) si ce n'est pas le cas.
+
+Pour installer JMeter, suivre [ce lien](https://dlcdn.apache.org//jmeter/binaries/apache-jmeter-5.6.3.zip).
