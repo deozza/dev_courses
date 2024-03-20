@@ -8,7 +8,8 @@
  4. [Les protocoles de test](#4-les-protocoles-de-test)
  5. [Analyse et audit](#5-analyse-et-audit)
  6. [Automatiser avec la CI/CD](#6-automatiser-avec-la-cicd)
- 7. [Installation des outils](#7-installation-des-outils)
+ 7. [Méthodologie du TDD](#7-méthodologie-du-tdd)
+ 8. [Installation des outils](#8-installation-des-outils)
 
 ## 1. Définition
 
