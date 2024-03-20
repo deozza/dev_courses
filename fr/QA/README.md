@@ -242,32 +242,7 @@ Une fois installé, lancer le logiciel (dans `/bin/jmeter.bat` pour windows ou d
 
 Les outils d'analyse statique, également appelés `linter` ont pour objectif de lire la code base d'une application et de signaler lorsqu'une anomalie est détectée. Suivant la configuration qui a été faite, cela peut permettre de mettre en avant de possibles bugs, comme l'utilisation d'une variable alors qu'elle n'a pas encore été instanciée ou l'utilisation d'une méthode qui n'a pas encore été créée. Cela peut aussi forcer un style d'écriture de code sur l'ensemble de l'application, comme par exemple forcer le camel case sur les variables et les méthodes, forcer le retour à la ligne après un `{` au début d'une méthode, ...
 
-En PHP, un des outils de ce style s'appelle `PHPStan`. Pour l'installer dans votre application, vous devez avoir le package manager `composer` d'installé et un fichier `composer.json` dans votre application. Vous pourrez alors lancer la commande :
-
-```bash
-composer require --dev phpstan/phpstan
-``` 
-
-*Notez le `--dev`, cette dépendance ne sera pas installée sur la prod*
-
-La configuration de l'outil se situe dans le fichier `phpstan.dist.neon` . 
-
-Voici un exemple de fichier pour un projet Symfony : 
-
-```yaml
-parameters:
-    level: 6
-    paths:
-        - bin/
-        - config/
-        - public/
-        - src/
-        - tests/
-```
-
-Pour en savoir plus sur les configurations possibles, [regarder ici](https://phpstan.org/config-reference)
-
-Pour lancer l'analyse, utiliser la commande : 
+En PHP, un des outils de ce style s'appelle `PHPStan`. Pour lancer l'analyse, utiliser la commande : 
 
 ```bash
 vendor/bin/phpstan analyse
@@ -286,15 +261,6 @@ vendor/bin/phpstan analyse --generate-baseline
 Cette commande va créer un fichier `phpstan-baseline.neon` et listera les recommandations actuelles. Et lors prochaines analyses, l'outil ne remontera pas les recommandations qui sont déjà listées dans la baseline. Cela est utile notamment dans une intégration de CI/CD lorsque les erreurs remontées ne sont pas décisives pour une livraison.
 
 En JavaScript, on utilisera le duo `esLint` et `Prettier`. Le premier sera notre linter, l'outil analysant notre code et remontant les changements recommandés. Le second nous permet d'automatiquement réaliser les changements.
-
-Pour les installer dans votre application, vous devez avoir le package manager `npm` d'installé et un fichier `package.json` dans votre application. Vous pourrez alors lancer la commande :
-
-```bash
-npm init @eslint/config
-npm install --save-dev --save-exact prettier
-```
-
-`eslint` se configure dans les fichiers `.eslintrc.cjs` et `.eslintignore`, tandis que `prettier` se configure dans `.prettierrc` et `.prettierignore`.
 
 Pour lancer l'analyse de votre application nodejs, vous pouvez lancer la commande : 
 
@@ -403,27 +369,58 @@ Définition :
 
 ### PHPUnit
 
-Vous devez avoir l'outil de gestion de dépendances `composer` d'installé. Lancez la commande : 
+Vous devez avoir l'outil de gestion de dépendances `composer` d'installé et un fichier `composer.json` dans votre application. Lancez la commande : 
 
 ```bash
 composer require --dev phpunit/phpunit
 ```
 
+*Notez le `--dev`, cette dépendance ne sera pas installée sur la prod*
+
 Vous aurez un fichier de configuration `phpunit.xml.dist`. Pour en savoir plus sur les configurations possibles, suivre [ce lien](https://docs.phpunit.de/en/11.0/configuration.html)
 
 Les tests seront écrits dans le dossier `/tests`
 
+### PHPStan
+
+Vous devez avoir le package manager `composer` d'installé et un fichier `composer.json` dans votre application. Lancez la commande :
+
+```bash
+composer require --dev phpstan/phpstan
+``` 
+
+*Notez le `--dev`, cette dépendance ne sera pas installée sur la prod*
+
+La configuration de l'outil se situe dans le fichier `phpstan.dist.neon` . 
+
+Voici un exemple de fichier pour un projet Symfony : 
+
+```yaml
+parameters:
+    level: 6
+    paths:
+        - bin/
+        - config/
+        - public/
+        - src/
+        - tests/
+```
+
+Pour en savoir plus sur les configurations possibles, [regarder ici](https://phpstan.org/config-reference)
+
 ### Vitest
 
-Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé. Lancez la commande :
+Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé et un fichier `package.json` dans votre application. Lancez la commande :
 
 ```bash
 npm i -D vitest
 ```
 
+*Notez le `-D`, cette dépendance ne sera pas installée sur la prod*
+
 ### Playwright
 
-Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé. Lancez la commande :
+Vous devez avoir l'outil de gestion de dépendances `npm` ou un équivalent d'installé et un fichier `package.json` dans votre application. Lancez la commande :
 
 ```bash
 npm init playwright@latest
@@ -436,6 +433,20 @@ npx playwright install
 ```
 
 Vous aurez un fichier de configuration `playwright.config.ts`. Pour en savoir plus sur les configurations possibles, suivre [ce lien](https://playwright.dev/docs/test-configuration)
+
+### ESLient et Prettier
+
+Vous devez avoir le package manager `npm` d'installé et un fichier `package.json` dans votre application.lancez la commande :
+
+```bash
+npm init @eslint/config
+npm install -D --save-exact prettier
+```
+
+*Notez le `-D`, cette dépendance ne sera pas installée sur la prod*
+
+
+`eslint` se configure dans les fichiers `.eslintrc.cjs` et `.eslintignore`, tandis que `prettier` se configure dans `.prettierrc` et `.prettierignore`.
 
 ### Selenium IDE
 
