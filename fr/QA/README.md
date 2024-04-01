@@ -1,15 +1,33 @@
-# La QA - ou comment s'assurer qu'une app fonctionne
+# La QA - ou comment s'assurer qu'une app fonctionne <!-- omit in toc -->
 
-## Sommaire 
+## Sommaire <!-- omit in toc -->
 
- 1. [Définition](#1-définition)
- 2. [Quand intégrer la QA ?](#2-quand-intégrer-la-qa)
- 3. [Qui intervient ?](#3-qui-intervient)
- 4. [Les protocoles de test](#4-les-protocoles-de-test)
- 5. [Analyse et audit](#5-analyse-et-audit)
- 6. [Automatiser avec la CI/CD](#6-automatiser-avec-la-cicd)
- 7. [Méthodologie du TDD](#7-méthodologie-du-tdd)
- 8. [Installation des outils](#8-installation-des-outils)
+- [1. Définition](#1-définition)
+- [2. Quand intégrer la QA ?](#2-quand-intégrer-la-qa-)
+- [3. Qui intervient ?](#3-qui-intervient-)
+  - [a. Les développeur.ses](#a-les-développeurses)
+  - [b. Les utilisateur.rices](#b-les-utilisateurrices)
+  - [c. Les QA](#c-les-qa)
+- [4. Les protocoles de test](#4-les-protocoles-de-test)
+  - [a. Les tests manuels](#a-les-tests-manuels)
+  - [b. Les tests unitaires](#b-les-tests-unitaires)
+  - [c. Les tests fonctionnels](#c-les-tests-fonctionnels)
+  - [d. Les tests E2E](#d-les-tests-e2e)
+  - [e. Les tests de performance](#e-les-tests-de-performance)
+- [5. Analyse et audit](#5-analyse-et-audit)
+  - [a. Analyse statique de code](#a-analyse-statique-de-code)
+  - [b. Audit externe de site web](#b-audit-externe-de-site-web)
+- [6. Automatiser avec la CI/CD](#6-automatiser-avec-la-cicd)
+- [7. Méthodologie du TDD](#7-méthodologie-du-tdd)
+- [8. Installation des outils](#8-installation-des-outils)
+  - [PHPUnit](#phpunit)
+  - [PHPStan](#phpstan)
+  - [Vitest](#vitest)
+  - [Playwright](#playwright)
+  - [ESLient et Prettier](#eslient-et-prettier)
+  - [Selenium IDE](#selenium-ide)
+  - [Apache JMeter](#apache-jmeter)
+
 
 ## 1. Définition
 
