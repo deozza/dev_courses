@@ -29,7 +29,7 @@ La QA intervient tout au long de la vie d'un produit. C'est un processus proacti
 
 ### a. Les développeur.ses
 
-Les développeurs et développeuses doivent dans la théorie tester leur code et fournir des scénarios reproductibles pour que d'autres puissent tester également. Les tests peuvent avoir lieu pendant le développement d'une fonctionnalité, une fois qu'elle est développée, et avant de l'intégrer au reste de l'application. 
+Les développeurs et développeuses doivent dans la théorie tester leur code et fournir des scénarios reproductibles pour que d'autres puissent tester également. Ils permetttent d'une part de garantir que le code ajouté au logiciel est en accord avec le cahier des charges, et d'autre part qu'il ne dégrade pas le reste du logiciel. Les tests peuvent avoir lieu pendant le développement d'une fonctionnalité, une fois qu'elle est développée, et avant de l'intégrer au reste de l'application. 
 
 Le plus souvent, ces tests sont codés et sont versionnés, de la même manière que le reste du programme. Cela permet de tenir un historique et de suivre le évolutions du code et des tests. Cela permet aussi de pouvoir automatiser l'exécution des tests.
 
@@ -51,7 +51,11 @@ Les tests manuels sont les plus simples à réaliser. En contrepartie, il est as
  - savoir comment générer des jeux de tests
  - garder un historique des évolutions des méthodes de tests
  - prouver que le test réalisé correspond aux attentes
- - prouver que le test a été réalisé 
+ - prouver que le test a été réalisé
+
+Il est nécessaire d'utiliser un outil externe pour rassembler les informations sur les tests réalisés. Quelle fonctionnalité est téstée, les étapes pour réaliser le test, les jeux de donnés utilisés, le résultat attendu de chacune de ces étapes, le résultat obtenu, le temps passé pour réaliser le test. 
+
+[xray (de jira)](https://marketplace.atlassian.com/apps/1211769/xray-test-management-for-jira?tab=overview&hosting=cloud) fait parti de ces outils.
 
 ### b. Les tests unitaires
 
@@ -188,7 +192,34 @@ Dans cet exemple, nous aurons donc le test `test_getUsers_checkAuthorizedMethods
 
 **Avec Postman comme client API**
 
+Postman est ce qu'on appelle un client API. C'est un logiciel qui permet d'exécuter des requêtes HTTP vers un serveur API. Il est utilisable sur navigateur et sans compte, mais pour profiter de toutes ses fonctionnalités, le mieux est de télécharger le client lourd et d'utiliser un compte. Vous pouvez également utiliser des alternatives, comme Insomnia ou Thunder Client (qui est utilisable directement dans Visual Studio).
 
+![postman](../../assets/QA/images/postman.png)
+
+ 1. sélection de verbe HTTP 
+
+Vous devez sélectionner parmi la liste des verbes HTTP (POST, PUT, PATCH, GET, DELETE, ...) pour pouvoir envoyer votre requête
+
+ 2. url
+
+Vers quel endpoint envoyer la requête.
+
+ 3. paramètrage de la requête
+
+ * params correspond aux query params (aussi appelés url params), ils correspondent aux paramètres que l'ont retrouve dans l'url
+ * authorization correspond à la manière dont vous vous authentifiez auprès de l'API (Bearer token, API key, OAUth, login/password, ...)
+ * headers correspond aux headers envoyés avec la requête (Authorization, Content-type, ...)
+ * body correspond au payload, à ce que vous envoyez comme contenu de la requête devant être traité par l'API (fichiers, formulaire JSON, ...)
+ * pre-request script correspond à des scripts légers en JS s'exécutant avant de lancer la requête
+ * tests correspond à des scripts légers en JS s'exécutant après la requête, vous pouvez vous en servir pour automatiser la réussité ou l'échec d'un test d'API. Postman fournit dans cet onglet des exemples de tests simples, comme vérifier le status code retour, vérifier que la réponse contienne une string, ...
+
+ 4. réponse obtenue
+
+Détails de la réponse du serveur, avec son body, son status code, ses headers et le temps écoulé.
+
+ 5. liste de vos requêtes enregistrées
+
+Vous pouvez enregistrer vos requêtes dans des collections pour mieux vous organiser. Vous pouvez également lancer toutes les requêtes d'une collection à la suite. Ceci est notamment pratique pour simuler un test E2E ou fonctionnel d'un API, en lançant toutes les requêtes nécessaires pour valider un scénario.
 
 ### d. Les tests E2E
 
@@ -232,9 +263,53 @@ Définition : tester quelles sont les limites d'une application en terme de flux
 
 Exemple : vérifier qu'une page web tienne 1000 utilisateurs
 
+On différencie les tests de perfomance des tests de charge. Les premiers permettent de valider qu'un logiciel tienne une pression donnée. C'est l'exemple donné précédemment. Un test de charge quant à lui va permettre de savoir comment réagit un logiciel lorsqu'on utilise 100% de ses ressources dans un temps donné. Utile dans le cas où on veut déterminer les limites de notre application.
+
 **Avec Apache JMeter**
 
 Une fois installé, lancer le logiciel (dans `/bin/jmeter.bat` pour windows ou dans `/bin/jmeter.sh` pour mac et linux).
+
+ 1. Ajouter un thread group : 
+
+Le `thread group` est le point de départ de notre test. C'est ici qu'on va configurer combien d'utilisateurs (threads) JMeter va simuler et comment ils vont se comporter.
+
+Clic droit sur le `sample test`, add, thread, group
+
+![apache jmeter thread group](../../assets/QA/images/thread_group_added.jpg)
+
+Vous pourrez y configurer combien d'utilisateurs le test va simuler (`Number of threads`), le temps pour que ce nombre soit atteint (`Ramp-up period`) ainsi que le nombre de fois que ce test sera exécuté (`Loop count`). 
+
+Par exemple, si vous souhaitez tester un groupe de 1000 utilisateurs qui arrivent d'un coup sur votre site, 3 fois, vous configurerez : 
+
+ * `Number of threads` : 1000
+ * `Ramp-up period` : 0
+ * `Loop count` : 3
+
+Par exemple, si vous souhaitez tester un groupe de 10000 utilisateurs qui arrivent progressivement en 10 secondes, sur votre site, 1 fois, vous configurerez : 
+
+ * `Number of threads` : 10000
+ * `Ramp-up period` : 10
+ * `Loop count` : 1
+
+Pour valider la constancd des performances et éviter des bruits statistiques, il vaut mieux répéter ces tests plusieurs fois et rentrer une valeur dans le `Loop count` .
+
+ 2. Ajouter un sampler :
+
+Le `sampler` permet de créer un modèle de requête qui sera réutilisé durant le test. Cela nous évitera par la suite de devoir configurer d'autres éléments.
+
+Clic droit sur le `thread group`, add, sampler, http request
+
+![apache jmeter sampler](../../assets/QA/images/empty_sampler.jpg)
+
+Vous pourrez y configurer l'url (`Server name or IP`), le port (`Port`) et l'endpoint (`Path`) utilisés par les requêtes.
+
+ 3. Ajouter un listener
+
+Le `listener` permet de récolter les informations des requêtes exécutées et de les mettre en forme pour qu'on puisse les analyser.
+
+Clic droit sur le `thread group`, add, listener, graph results
+
+![apache jmeter listener](../../assets/QA/images/graph_result.gif)
 
 ## 5. Analyse et audit
 
