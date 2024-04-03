@@ -1,0 +1,802 @@
+# Introduction à nuxtjs <!-- omit in toc -->
+
+## Sommaire <!-- omit in toc -->
+
+- [Présentation de svelte](#présentation-de-svelte)
+- [Présenation de sveltekit](#présenation-de-sveltekit)
+- [Création d'un projet](#création-dun-projet)
+- [Description de l'arborescence de fichiers et des types de fichier](#description-de-larborescence-de-fichiers-et-des-types-de-fichier)
+- [Créer une page](#créer-une-page)
+- [Créer un composant](#créer-un-composant)
+- [Les slots](#les-slots)
+- [Les variable](#les-variable)
+- [Passer une variable à un composant](#passer-une-variable-à-un-composant)
+- [Passer un argument réactif à un composant](#passer-un-argument-réactif-à-un-composant)
+- [Les events](#les-events)
+- [Les conditions et les boucles](#les-conditions-et-les-boucles)
+- [Les variables réactives](#les-variables-réactives)
+- [Créer un layout](#créer-un-layout)
+- [CSS](#css)
+- [Les animations](#les-animations)
+- [Le store](#le-store)
+- [Une application fullstack ?](#une-application-fullstack-)
+- [Déployer](#déployer)
+
+
+## Présentation de svelte
+
+Svelte est un framework mis au point par Rich Harris en 2016. Son objectif était de créer un outil pour développer des applications front-end simples et légères. Pour cela, Svelte fait le gros du travail lors du build de l'application et non pas au moment de l'affichage par le navigateur et l'interprétation du code. C'est pour cette raison qu'on considère davantage Svelte comme un compilateur qu'un framework.
+
+Svelte se base sur HTML, CSS et JS/TS. Il n'est pas nécessaire d'apprendre un nouveau langage pour l'utiliser (contrairement à React) et, du fait qu'il n'embarque pas beaucoup de mots-clefs, on peut commencer à l'utiliser avec des notions basiques de front-end.
+
+## Présenation de sveltekit
+
+Sveltekit est à Svelte ce que NextJS est à React et NuxtJS est à Vue : un framework qui se base sur un autre et qui y incorpore des fonctionnalités avancées pour créer des sites webs. Sveltekit permet entre autre de créer des appliations SPA, SSR et SSG. Il intègre le routeur automatique par arborescence de fichiers.
+
+## Création d'un projet
+
+Pour créer un projet Sveltekit, il faut avoir installé NodeJS v18 au minimum. Lancez ensuite la commande suivante : 
+
+```bash
+npx nuxi@latest init nom-de-mon-appli
+```
+
+Le prompt du terminal va ensuite vous permettre de configurer votre application avec un formulaire. Sélectionnez les options qui semblent correspondre avec les besoins de votre projet.
+
+## Description de l'arborescence de fichiers et des types de fichier
+
+nom-de-mon-appli/
+├ public/
+│ └ [your static assets]
+├ server/
+│ └ [your tests]
+├ app.vue
+├ package.json
+├ nuxt.config.ts
+└ tsconfig.json
+
+**tsconfig.json**
+
+Fichier de configuration pour le linter typescript.
+
+**nuxt.config.ts**
+
+Fichier de configuration pour le projet svelte
+
+**package.json**
+
+Fichier de configuration des dépendances du projet. Liste également les commandes `npm` relatives au projet. .
+
+**/server**
+
+Dossier pour stocker les endpoints API de l'application.
+
+**/public**
+
+Dossier pour stocker les fichiers médias (vidéos, images, audio, ...). Attention : tous les fichies stockés ici seront accessibles à tous les visiteurs du site. Il ne faut pas y stocker de fichiers qui sont réservés à des utilisateurs en particulier.
+
+**/node_modules**
+
+Dossier dans lequel sont stockées les dépendances listées dans `package.json`. A ignorer.
+
+**/.nuxt**
+
+Dossier de build intermédiaire. A ignorer.
+
+## Créer une page
+
+Pour créer une nouvelle page dans une application NuxtJS, nous devons tout d'abord créer un nouveau dossier `/pages` dans lequel nous stockerons nos fichiers en fonction des URL voulues. Puis, il faut modifier le fichier `/app.vue` pour que l'application puisse gérer automatiquement les pages : 
+
+```vue
+<template>
+  <div>
+    <NuxtPage />
+  </div>
+</template>
+```
+
+Enfin, nous pouvons créer notre première `/pages/index.vue` : 
+
+```vue
+<template>
+  <h1>Index page</h1>
+</template>
+```
+
+Dans un terminal, lancez la commande `npm run dev -- -o` pour démarrer le serveur et voir notre page : 
+
+![1-create_page](../../../../../assets/js/nodejs/vuejs/nuxtjs/1-create_page.png)
+
+Chaque page dans une application NuxtJS se décompose en 3 parties : 
+
+ * la partie `<script>`, ce sera là qu'on écrira nos manipulations de données en JS/TS pour la page en cours
+ * la partie html
+ * la partie `<style>`, ce sera là qu'on écrira notre CSS pour la page en cours
+
+La partie html doit impérativement commencer par la balise `<template>`, et celle-ci ne peut contenir qu'une seule autre balise. Par exemple, ce code est invalide : 
+
+```vue
+<template>
+  <h1>Index page</h1>
+  <p>paragraphe</p>
+</template>
+```
+
+Pour le rendre valide, il faut entourer le `<h1>` et le `<p>` d'une autre balise, unique enfant de la balise `<template>` :
+
+```vue
+<template>
+    <div>
+        <h1>Index page</h1>
+        <p>paragraphe</p>
+    </div>
+</template>
+```
+
+Historiquement, jusqu'à Nuxt 2, pour écrire une page, il fallait utiliser le concept de `options API`. La partie `<script>` ne pouvait contenir qu'un objet, formatté et retourné : 
+
+```vue
+<script>
+export default {
+  data() {
+    return {
+      count: 0
+    }
+  },
+  methods: {
+    increment(){
+      this.count++
+    }
+  }
+}
+</script>
+```
+
+Depuis Nuxt 3, une nouvelle manière plus simple a été implémentée : la `composition API` : 
+
+```vue
+<script setup lang="ts">
+    const count = ref(0);
+    function increment() {
+        count.value++;
+    }
+</script>
+```
+
+Il est toujours possibile d'utiliser l'options API.
+
+Concernant le routeur automatique, 2 options s'offrent à nous. On peut soit créer un dossier pour chaque url et y stocker un unique fichier `index.vue` dedans. Par exemple `/pages/about/index.vue` aura comme url `/about`. On peut aussi nommer directement notre fichier avec l'url voulue. Par exemple `/pages/about.vue` aura aussi comme url `/about`. Créons un ce fichier : 
+
+```vue
+<template>
+    <h1>About</h1>
+</template>
+```
+
+## Créer un composant
+
+L'une des principales fonctionnalités de NuxtJS est sa gestion des composants réutilisables. Dans une application, nous allons souvent avoir besoin des mêmes blocs visuels dans plusieurs pages. Au lieu de dupliquer du code et risquer d'introduire des bugs, nous allons créer un composant.
+
+Pour commencer simplement, nous allons créer un dossier `/components` et y stocker un composant `Header`, que nous utiliserons ensuite sur notre page `/about` ainsi que que la page d'accueil. Pour cela, créez un nouveau fichier `/components/Header.vue` : 
+
+```vue
+<template>
+    <h1>Title from component</h1>
+</template>
+```
+
+Comme vous pouvez le constater, un composant a la même structure qu'une page. Ce sera le cas également des layout qu'on verra plus tard.
+
+Un composant est utilisable dans une page, dans un layout et dans un autre composant. On appellera dorénavant `composant parent` un fichier (page, layout ou composant) qui utilise un autre composant. Et `composant enfant` un composant intégré à un autre composant. 
+
+Pour intégrer un composant, NuxtJS propose un système d'auto-import. Il suffit de l'insérer dans la partie `html` comme n'importe quelle autre balise. Ajoutons ce composant dans le fichier `/pages/about.vue` : 
+
+```vue
+<template>
+    <div>
+        <h1>About</h1>
+        <Header />
+    </div>
+
+</template>
+```
+
+![2-create_component](../../../../../assets/js/nodejs/vuejs/nuxtjs/2-create_component.png)
+
+## Les slots
+
+Un autre intérêt des composants est leur capacité à être customisés par le composant parent. Jusqu'à présent, notre composant `Header.vue` affiche `Title from component` peu importe comment il est intégré. Le but serait qu'il affiche `About` sur la page `/about` et `Index page` sur la page d'accueil.
+
+Pour faire cela, on peut utiliser les `slots`. Un slot se présente en 2 parties. Du côté composant parent, il s'agit du contenu que l'on écrira dans la balise appelant le composant. Du côté composant enfant, il prendra la forme `<slot />`. Il indiquera la position que prendra le contenu écrit dans la balise du composant parent.
+
+```vue
+<!-- /components/Header.vue -->
+<template>
+    <h1><slot></slot></h1>
+</template>
+```
+
+```vue
+<!-- /pages/index.vue -->
+<template>
+    <div>
+        <Header>Index page</Header>
+    </div>
+</template>
+```
+
+```vue
+<!-- /pages/ -->
+<template>
+    <div>
+        <Header>About</Header>
+    </div>
+
+</template>
+```
+
+Vous pourrez constater que grâce au composant et au slot, nous avons pu configurer un header qui possède le même style dans l'ensemble de l'application, mais dont le contenu est variable en fonction du composant parent.
+
+Si on souhaite utiliser plusieurs slots dans le même composant, on pourra utiliser la variante nommée pour les différencier : 
+
+```vue
+<!-- /components/Header.vue -->
+<template>
+    <h1><slot name="header" /></h1>
+    <p><slot name="description" /></p>
+</template>
+
+<style>
+
+    h1 {
+        color: red;
+        font-size: x-large;
+        text-decoration: underline;
+    }
+    
+</style>
+```
+
+```vue
+<!-- /pages/index.vue -->
+<template>
+    <div>
+        <Header>
+            <template v-slot:header>
+                Index page
+            </template>
+            <template v-slot:description>
+                Hello World !
+            </template>
+        </Header>
+    </div>
+</template>
+```
+
+```vue
+<!-- /pages/about.vue -->
+<template>
+    <div>
+        <Header>
+            <template v-slot:header>
+                About
+            </template>
+            <template v-slot:description>
+                This is me !
+            </template>
+        </Header>
+    </div>
+
+</template>
+```
+
+## Les variable
+
+Pour créer une variable JS/TS en NuxtJS, il suffit de se mettre dans la partie `<script>` d'un composant et d'utiliser les mots clefs classiques du langage. Pour faire cela et voir comment manipuler des variables dans Nuxtjs, nous allons créer une nouvelle `/pages/greetings.vue` : 
+
+```vue
+<script setup lang="ts">
+
+    let name: string = "James";
+
+</script>
+
+<template>
+<h1>Hello {{name}}</h1>
+
+</template>
+
+```
+
+La partie `let name: string = 'James';` crée une variable `name`, utilisable aussi bien dans le reste du `script` que dans le `html`. `<h1>Hell {{name}}</h1>` grâce aux `{{}}`.
+
+## Passer une variable à un composant
+
+Les slots sont pratiques lorsque l'ont veut faire passer du contenu statique d'un composant parent à un composant enfant. Mais ils sont inadaptés lorsque l'ont veut transmettre une variable. Pour cela, nous utiliserons des `props`.
+
+Créons un nouveau composant `/components/Greetings.vue` : 
+
+```vue
+<script lang="ts">
+    export let catUrl: string;
+</script>
+
+<img src="{catUrl}" alt="cat">
+
+<style>
+
+</style>
+```
+
+Pour différencier une variable classique d'un props, il faut rajouter le mot clef `export` devant l'instanciation de la variable.
+
+Pour utiliser ce composant avec son props, mettons à jour la `/pages/cat/+page.vue` : 
+
+```vue
+<script lang="ts">
+	import { onMount } from "svelte";
+    import CatImage from "$lib/CatImage.vue";
+
+    let catUrl: string = '';
+
+    onMount(() => {
+        fetch('https://api.thecatapi.com/v1/images/search')
+        .then(response => response.json())
+        .then(data => {
+            catUrl = data[0].url;
+        });
+    });
+
+</script>
+
+<h1>Cat</h1>
+
+<CatImage catUrl="{catUrl}"/>
+
+<style>
+
+</style>
+```
+
+Nous avons ici la balise `<CatImage />` qui intègre le composant `CatImage`. Pour lui passer le props dont il a besoin pour fonctionner, il suffit de rajouter le nom de ce props dans la balise suivi de sa valeur selon le schéma `nomDuProps=value`. Ici : `catUrl="{catUrl}"`.
+
+En utilisant `export let catUrl: string;` sans donner de valeur, cela signifie que le props n'aura pas de valeur par défaut. Donc, si aucune valeur n'est renseignée dans le composant parent, une erreur aurait été levée. Pour donner une valeur par défaut au props, il suffit de faire :
+
+```vue
+<script lang="ts">
+    export let catUrl: string = '';
+</script>
+
+<img src="{catUrl}" alt="cat">
+
+<style>
+
+</style>
+```
+
+Autre chose à noter : si le nom du props dans le composant enfant est le même que le nom de la variable passée depuis le composant parent, alors on peut simplement passer la variable. Dans notre exemple, le props s'appelle `catUrl` et la variable dans le composant parent s'appelle également `catUrl`. On peut donc mettre à jour : 
+
+```vue
+<script lang="ts">
+	import { onMount } from "svelte";
+    import CatImage from "$lib/CatImage.vue";
+
+    let catUrl: string = '';
+
+    onMount(() => {
+        fetch('https://api.thecatapi.com/v1/images/search')
+        .then(response => response.json())
+        .then(data => {
+            catUrl = data[0].url;
+        });
+    });
+
+</script>
+
+<h1>Cat</h1>
+
+<CatImage {catUrl}/>
+
+<style>
+
+</style>
+```
+
+## Passer un argument réactif à un composant
+
+Il est possible qu'une variable, une fois envoyée à un composant enfant, soit manipulé et modifié. Pour que ce changement soit reflété dans le composant parent, il faut utiliser le mot clef `bind` lors de l'affectation. Nous allons créer une nouvelle `/pages/sum/+page.vue` ainsi qu'un nouveau composant `/components/Sum.vue`: 
+
+```vue
+<!-- /components/Sum.vue -->
+<script lang="ts">
+    export let a: number;
+    export let b: number;
+    export let result: number;
+    
+    function sum(a: number, b: number): number {
+        return a + b;
+    }
+</script>
+
+<div>
+
+    <input type="number" bind:value={a}>
+    <input type="number" bind:value={b}>
+    <button on:click={() => result = sum(a, b)}>Sum</button>
+</div>
+```
+
+*Notez que `bind` fonctionne aussi pour mettre à jour une variable manipulée par un input.*
+
+```vue
+<!-- /pages/sum/+page.vue-->
+<script lang="ts">
+    import Sum from '$lib/Sum.vue';
+
+    let a = 0;
+    let b = 0;
+    let result = 0;
+
+
+</script>
+
+<h1>Sum</h1>
+
+<Sum {a} {b} bind:result={result} />
+
+<p>Result: {result}</p>
+```
+
+Les variables `a` et `b` ont le même nom dans le composant enfant et le composant parent, on peut donc les utiliser directement. La variable `result` également, mais à cause de `bind`, on est obligé de l'écrire de la longue manière.
+
+Nous avons ici une page parent qui initialiser le résultat à 0, et intègre un composant enfant qui calcule le résultat et le renvoi au composant parent une fois actualisé.
+
+## Les events
+
+Dans l'exemple précédent, nous avons utilisé un bouton avec à l'intérieur `on:click`. C'est ce qu'on appelle un event. Avec SvelteKit, il est possible de créer des évènements et de les affecter à des fonctions de notre partie script. 
+
+Les events du DOM sont les évènements classiques que chaque navigateur gère par défaut. Le plus pratique d'entre eux est le `on:click`, vu précédemment, qui s'active lorsqu'on clique avec la souris sur l'élément html associé. Il nous permet de lancer une fonction, avec le schéma `on:click={(event) => methodToCall()}`. 
+
+Pour illustrer cette fonctionnalité, nous allons créer un compteur avec une nouvelle page `/pages/count/+page.vue` : 
+
+```vue
+<script lang="ts">
+    let count: number = 0;
+
+    function increment() {
+        count += 1;
+    }
+
+    function decrement() {
+        count -= 1;
+    }
+
+</script>
+
+<h1>Count</h1>
+
+<button on:click={decrement}>-</button>
+<p>Count: {count}</p>
+<button on:click={increment}>+</button>
+```
+
+## Les conditions et les boucles
+
+Avec SvelteKit, il est possible de manipuler l'html en fonction des variables. En effet, on peut afficher un bloc en fonction d'une condition, répéter un bloc par rapport à une liste ou encore afficher différents blocs en fonction de l'état d'avancement d'une requête API.
+
+**Bloc conditionnel**
+
+Pour afficher un bloc d'html en fonction d'une condition, on utilisera le pattern `{#if condition}{:else if}{:else}{/if}`. Modifions la `/pages/count/+page.vue` pour afficher un message pour savoir si le nombre affiché est pair ou impair : 
+
+```vue
+<script lang="ts">
+    let count: number = 0;
+
+    function increment() {
+        count += 1;
+    }
+
+    function decrement() {
+        count -= 1;
+    }
+
+</script>
+
+<h1>Count</h1>
+
+<button on:click={decrement}>-</button>
+<p>Count: {count}</p>
+<button on:click={increment}>+</button>
+
+{#if count % 2 === 0}
+    <p>Count is even</p>
+{:else}
+    <p>Count is odd</p>
+{/if}
+```
+
+**Boucle**
+
+Si on veut répéter un bloc html pour afficher les différents éléments d'une liste, on utilisera le pattern `{#each list as element, i}{/each}`. `list` étant la variable contenant la variable sur laquelle itérer, `element` étant une nouvelle variable créée pour l'itération en cours, `i` est optionnel et correspond à l'index de l'itération en cours. Créons une nouvelle page `/pages/todo/+page.vue` pour afficher une todolist : 
+
+```vue
+<script lang="ts">
+    let todoList: string[] = ['walk the dog', 'exercise', 'eat a fruit'];
+</script>
+
+<h1>Todo</h1>
+
+<ul>
+    {#each todoList as todo}
+        <li>{todo}</li>
+    {/each}
+</ul>
+```
+
+**Affichage en attente d'une requête**
+
+L'une des fonctionnalités intéressante de JavaScript est la possibilité d'envoyer des requêtes asynchrones à des services web. Du fait de leur nature, il faut que l'interface sache gérer 3 possibilités : 
+ * le chargement des données
+ * le succès de la requête
+ * l'échec de la requête
+
+SvelteKit permet de faire ça simplement avec le pattern `{#await method()}{:then }{:catch }{/await}`. Créons une nouvelle page `/pages/await/+page.vue` pour afficher une image de chat après avoir réussi une requête API : 
+
+```vue
+<script lang="ts">
+
+    async function fetchPokemon() {
+        return await fetch('https://api.thecatapi.com/v1/images/search')
+            .catch(err => {
+                console.error(err);
+                return err;
+            })
+            .then(async (response) => {                
+                return response.json();
+            })
+            .then(data => {
+                return data[0].url;
+            });
+    }
+</script>
+
+{#await fetchPokemon()}
+    loading...
+{:then url}
+<img src="{url}" alt="">
+{:catch e}
+    An error happened : {e.message}
+{/await}
+```
+
+Vous pouvez constater que le temps que la requête soit complète, un message apparait. Contrairement à notre précédente page `/pages/cat/+page.vue` qui n'affiche rien pendant le chargement.
+
+## Les variables réactives
+
+```vue
+<script lang="ts">
+    let number: number = 0;
+
+    $:double = number * 2;
+    $:quadruple = double * 2;
+    $:half = number / 2;
+    $:square = number ** 2;
+</script>
+
+<h1>Reactive</h1>
+
+<input type="number" bind:value={number}>
+
+<p>{number} * 2 = {double}</p>
+<p>{number} * 4 = {quadruple}</p>
+<p>{number} / 2 = {half}</p>
+<p>{number}² = {square}</p>
+```
+
+## Créer un layout
+
+```vue
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/await">Await</a></li>
+        <li><a href="/cat">Cat</a></li>
+        <li><a href="/count">Count</a></li>
+        <li><a href="/reactive">Reactive</a></li>
+        <li><a href="/sum">Sum</a></li>
+        <li><a href="/todo">Todo</a></li>
+
+    </ul>
+</nav>
+
+<main>
+    <slot></slot>
+</main>
+```
+
+## CSS
+
+```vue
+<!-- /pages/+layout.vue-->
+<script lang="ts">
+    import '../app.css'
+</script>
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/await">Await</a></li>
+        <li><a href="/cat">Cat</a></li>
+        <li><a href="/count">Count</a></li>
+        <li><a href="/reactive">Reactive</a></li>
+        <li><a href="/sum">Sum</a></li>
+        <li><a href="/todo">Todo</a></li>
+
+    </ul>
+</nav>
+
+<main>
+    <slot></slot>
+</main>
+
+<p>In layout</p>
+
+<style>
+    p {
+        color: blue;
+    }
+</style>
+```
+
+```vue
+<!-- /pages/+page.vue-->
+<script lang="ts">
+
+import Header from "$lib/Header.vue";
+
+</script>
+
+<Header>
+    <span slot="header">Welcome to SvelteKit</span>
+    <span slot="description">Visit <a href="https://kit.vue.dev">kit.vue.dev</a> to read the documentation</span>
+</Header>
+
+
+<p>In page</p>
+
+<style>
+    p{
+        color: brown;
+    }
+</style>
+```
+
+```vue
+<!-- /components/Header.vue-->
+<script lang="ts">
+
+</script>
+
+<h1><slot name="header"/></h1>
+
+<p>
+    <slot name="description"/>
+</p>
+
+<p class="global">Get the global css</p>
+<style>
+
+    h1 {
+        color: red;
+        font-size: x-large;
+        text-decoration: underline;
+    }
+
+    p{
+        color: green;
+    }
+    
+</style>
+```
+
+![11-css](../../../../../assets/js/nodejs/svelte/sveltekit/11-css.png)
+
+## Les animations
+
+```vue
+<script>
+	import { fade } from 'svelte/transition';
+	let visible = true;
+</script>
+
+<label>
+	<input type="checkbox" bind:checked={visible} />
+	visible
+</label>
+
+{#if visible}
+	<p transition:fade>Fades in and out</p>
+{/if}
+```
+
+## Le store
+
+```ts
+// /src/store.ts
+import { writable } from 'svelte/store';
+
+export const number = writable(0);
+```
+
+```vue
+<!-- /pages/count/+page.vue -->
+<script lang="ts">
+    import { number } from "../store";
+
+    let count: number = 0;
+    number.subscribe(value => count = value);
+
+    function increment() {
+        number.update((n) => n + 1);
+    }
+
+    function decrement() {
+        number.update((n) => n - 1);    
+    }
+
+</script>
+
+<h1>Count</h1>
+
+<button on:click={decrement}>-</button>
+<p>Count: {count}</p>
+<button on:click={increment}>+</button>
+
+{#if count % 2 === 0}
+    <p>Count is even</p>
+{:else}
+    <p>Count is odd</p>
+{/if}
+```
+
+```vue
+<!-- /pages/reactive/+page.vue -->
+<script lang="ts">
+
+    import { number } from "../store";
+
+    $:double = $number * 2;
+    $:quadruple = double * 2;
+    $:half = $number / 2;
+    $:square = $number ** 2;
+</script>
+
+<h1>Reactive</h1>
+
+<input type="number" bind:value={$number}>
+
+<p>{$number} * 2 = {double}</p>
+<p>{$number} * 4 = {quadruple}</p>
+<p>{$number} / 2 = {half}</p>
+<p>{$number}² = {square}</p>
+
+```
+
+## Une application fullstack ?
+
+```ts
+// /pages/api/hello-world/+server.ts
+
+import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit'
+
+
+export const GET: RequestHandler = async () => {
+    
+    
+      return json({ 'hello': 'world' })
+};
+```
+
+## Déployer
