@@ -52,6 +52,7 @@ npm install
 
 ## Description de l'arborescence de fichiers et des types de fichier
 
+`
 nom-de-mon-appli/
 ├ src/
 │ ├ lib/
@@ -75,6 +76,7 @@ nom-de-mon-appli/
 ├ svelte.config.js
 ├ tsconfig.json
 └ vite.config.js
+`
 
 **vite.config.js**
 
@@ -602,6 +604,8 @@ Vous pouvez constater que le temps que la requête soit complète, un message ap
 
 ## Les variables réactives
 
+Pour créer une variable dont la valeur va évoluer en fonction d'une autre variable, SvelteKit met à disposition le mot clef `$:`. Créons une nouvelle page `/src/routes/reactive/+page.svelte` , dont le rôle sera de calculer le double, le quadruple, la moitié et le carré d'une variable : 
+
 ```html
 <script lang="ts">
     let number: number = 0;
@@ -622,7 +626,11 @@ Vous pouvez constater que le temps que la requête soit complète, un message ap
 <p>{number}² = {square}</p>
 ```
 
+***Cette mise en page sera remplacée dans Svelte 5 par le système des runes***.
+
 ## Créer un layout
+
+Le layout est un composant qui permet de réutiliser des éléments visuels sur des pages enfants. Quelque chose de pratique pour réutiliser un menu ou un footer sur les pages d'une application. Créons une layout `/src/pages/+layout.svelte` pour s'en rendre compte :
 
 ```html
 <nav>
@@ -643,8 +651,11 @@ Vous pouvez constater que le temps que la requête soit complète, un message ap
     <slot></slot>
 </main>
 ```
+Notez l'ajout de `slot`. Ce sera à cet endroit que le contenu des pages sera inséré dans le layout.
 
 ## CSS
+
+Dans SvelteKit, le style est `scoped` par défaut. Ce qui signifie qu'il ne se propage pas d'un élément à un autre. Il est contenu dans son composant. Dans le cas d'un conflit (si un style venant d'un composant parent s'applique sur le même élément qu'un composant enfant), alors le style du composant le plus enfant est prioritaire. Modifions certains de nos fichiers pour s'en rendre compte : 
 
 ```html
 <!-- /src/routes/+layout.svelte-->
@@ -732,6 +743,8 @@ import Header from "$lib/Header.svelte";
 ![11-css](../../../../../assets/js/nodejs/svelte/sveltekit/11-css.png)
 
 ## Les animations
+
+SvelteKit nous permet d'utiliser des animations et des transitions simplement. Pour qu'une transition ait lieu sur un bloc, il faut qu'il apparaisse sur l'interface après que la page soit affichée. Créons une nouvelle page `/src/routes/animation/+page.svelte` et utilisons une variable `visible` pour afficher et cacher un bloc :
 
 ```html
 <script>
