@@ -11,16 +11,13 @@
 - [Les slots](#les-slots)
 - [Les variable](#les-variable)
 - [Passer une variable à un composant](#passer-une-variable-à-un-composant)
-- [Passer un argument réactif à un composant](#passer-un-argument-réactif-à-un-composant)
+- [Mettre à jour une variable par l'interface](#mettre-à-jour-une-variable-par-linterface)
 - [Les events](#les-events)
 - [Les conditions et les boucles](#les-conditions-et-les-boucles)
 - [Les variables réactives](#les-variables-réactives)
 - [Créer un layout](#créer-un-layout)
 - [CSS](#css)
-- [Les animations](#les-animations)
 - [Le store](#le-store)
-- [Une application fullstack ?](#une-application-fullstack-)
-- [Déployer](#déployer)
 
 
 ## Présentation de svelte
@@ -317,280 +314,241 @@ Les slots sont pratiques lorsque l'ont veut faire passer du contenu statique d'u
 Créons un nouveau composant `/components/Greetings.vue` : 
 
 ```vue
-<script lang="ts">
-    export let catUrl: string;
+<script setup lang="ts" >
+defineProps({
+  name: String,
+})
 </script>
 
-<img src="{catUrl}" alt="cat">
-
-<style>
-
-</style>
+<template>
+  <h1>Hello {{name}}</h1>
+</template>
 ```
 
-Pour différencier une variable classique d'un props, il faut rajouter le mot clef `export` devant l'instanciation de la variable.
+Pour définir les props utilisés par un composant, il faut utiliser la fonction `defineProps` dans une balise `<script setup>`.
 
-Pour utiliser ce composant avec son props, mettons à jour la `/pages/cat/+page.vue` : 
+Pour utiliser ce composant avec son props, mettons à jour la `/pages/greetings.vue` : 
 
 ```vue
-<script lang="ts">
-	import { onMount } from "svelte";
-    import CatImage from "$lib/CatImage.vue";
+<template>
+    <Greetings name="Charles" />
+</template>
 
-    let catUrl: string = '';
-
-    onMount(() => {
-        fetch('https://api.thecatapi.com/v1/images/search')
-        .then(response => response.json())
-        .then(data => {
-            catUrl = data[0].url;
-        });
-    });
-
-</script>
-
-<h1>Cat</h1>
-
-<CatImage catUrl="{catUrl}"/>
-
-<style>
-
-</style>
 ```
 
-Nous avons ici la balise `<CatImage />` qui intègre le composant `CatImage`. Pour lui passer le props dont il a besoin pour fonctionner, il suffit de rajouter le nom de ce props dans la balise suivi de sa valeur selon le schéma `nomDuProps=value`. Ici : `catUrl="{catUrl}"`.
+Nous avons ici la balise `<Greetings />` qui intègre le composant `Greetings`. Pour lui passer le props dont il a besoin pour fonctionner, il suffit de rajouter le nom de ce props dans la balise suivi de sa valeur selon le schéma `nomDuProps=value`. Ici : `name="Charles"`.
 
-En utilisant `export let catUrl: string;` sans donner de valeur, cela signifie que le props n'aura pas de valeur par défaut. Donc, si aucune valeur n'est renseignée dans le composant parent, une erreur aurait été levée. Pour donner une valeur par défaut au props, il suffit de faire :
-
+Si on veut affecter une variable au props, il faut utiliser la syntaxe : `:nomDuProps="variable"` : 
 ```vue
-<script lang="ts">
-    export let catUrl: string = '';
-</script>
+<script setup lang="ts">
 
-<img src="{catUrl}" alt="cat">
-
-<style>
-
-</style>
-```
-
-Autre chose à noter : si le nom du props dans le composant enfant est le même que le nom de la variable passée depuis le composant parent, alors on peut simplement passer la variable. Dans notre exemple, le props s'appelle `catUrl` et la variable dans le composant parent s'appelle également `catUrl`. On peut donc mettre à jour : 
-
-```vue
-<script lang="ts">
-	import { onMount } from "svelte";
-    import CatImage from "$lib/CatImage.vue";
-
-    let catUrl: string = '';
-
-    onMount(() => {
-        fetch('https://api.thecatapi.com/v1/images/search')
-        .then(response => response.json())
-        .then(data => {
-            catUrl = data[0].url;
-        });
-    });
+    let user: string = "James";
 
 </script>
 
-<h1>Cat</h1>
-
-<CatImage {catUrl}/>
-
-<style>
-
-</style>
+<template>
+<Greetings name="Charles" />
+<Greetings :name="user" />
+</template>
 ```
 
-## Passer un argument réactif à un composant
-
-Il est possible qu'une variable, une fois envoyée à un composant enfant, soit manipulé et modifié. Pour que ce changement soit reflété dans le composant parent, il faut utiliser le mot clef `bind` lors de l'affectation. Nous allons créer une nouvelle `/pages/sum/+page.vue` ainsi qu'un nouveau composant `/components/Sum.vue`: 
+Si le nom du props est le même que le nom de la variable à passer, on peut simplement écrire `:nomDuProps` : 
 
 ```vue
-<!-- /components/Sum.vue -->
-<script lang="ts">
-    export let a: number;
-    export let b: number;
-    export let result: number;
-    
-    function sum(a: number, b: number): number {
-        return a + b;
+<script setup lang="ts">
+
+    let user: string = "James";
+    let name: string = "Michael";
+
+</script>
+
+<template>
+<Greetings name="Charles" />
+<Greetings :name="user" />
+<Greetings :name />
+</template>
+
+```
+
+En utilisant `defineProps({name: String = "John"})` sans donner de valeur, cela signifie que le props n'aura pas de valeur par défaut. Donc, si aucune valeur n'est renseignée dans le composant parent, une erreur aurait été levée. Pour donner une valeur par défaut au props, il faut utiliser une autre notation :
+
+```vue
+<script setup lang="ts" >
+defineProps({
+  name: {
+    type: String,
+    default: 'John'
+  },
+})
+</script>
+
+<template>
+  <h1>Hello {{name}}</h1>
+</template>
+```
+
+## Mettre à jour une variable par l'interface
+
+Il est possible qu'une variable, une fois utilisée sur l'interface, soit manipulé et modifié. Pour que ce changement soit reflété dans JS, il faut utiliser le mot clef `v-model` à la place de `value` dans la balise input. Nous allons créer une nouvelle `/pages/sum.vue` : 
+
+
+```vue
+<!-- /pages/sum.vue-->
+<script setup lang="ts">
+import { ref } from 'vue';
+
+    let num1: number = 0;
+    let num2: number = 0;
+    let result = ref(0);
+
+    function sum() {
+        result.value = num1 + num2;
     }
+    
 </script>
 
-<div>
+<template>
+  <div>
+    <input type="number" v-model="num1">
+    <input type="number" v-model="num2">
+    
+    <button v-on:click="sum" >Sum</button>
 
-    <input type="number" bind:value={a}>
-    <input type="number" bind:value={b}>
-    <button on:click={() => result = sum(a, b)}>Sum</button>
-</div>
+    <p>The sum is: {{ result }}</p>
+  </div>
+</template>
+
 ```
 
-*Notez que `bind` fonctionne aussi pour mettre à jour une variable manipulée par un input.*
-
-```vue
-<!-- /pages/sum/+page.vue-->
-<script lang="ts">
-    import Sum from '$lib/Sum.vue';
-
-    let a = 0;
-    let b = 0;
-    let result = 0;
-
-
-</script>
-
-<h1>Sum</h1>
-
-<Sum {a} {b} bind:result={result} />
-
-<p>Result: {result}</p>
-```
-
-Les variables `a` et `b` ont le même nom dans le composant enfant et le composant parent, on peut donc les utiliser directement. La variable `result` également, mais à cause de `bind`, on est obligé de l'écrire de la longue manière.
-
-Nous avons ici une page parent qui initialiser le résultat à 0, et intègre un composant enfant qui calcule le résultat et le renvoi au composant parent une fois actualisé.
+Nous avons ici une page qui initialise deux variables à 0, et lie les changements réalisés par l'utilisateur sur l'interface à ces variables.
 
 ## Les events
 
-Dans l'exemple précédent, nous avons utilisé un bouton avec à l'intérieur `on:click`. C'est ce qu'on appelle un event. Avec SvelteKit, il est possible de créer des évènements et de les affecter à des fonctions de notre partie script. 
+Dans l'exemple précédent, nous avons utilisé un bouton avec à l'intérieur `v-on:click`. C'est ce qu'on appelle un event. Avec NuxtJS, il est possible de créer des évènements et de les affecter à des fonctions de notre partie script. 
 
-Les events du DOM sont les évènements classiques que chaque navigateur gère par défaut. Le plus pratique d'entre eux est le `on:click`, vu précédemment, qui s'active lorsqu'on clique avec la souris sur l'élément html associé. Il nous permet de lancer une fonction, avec le schéma `on:click={(event) => methodToCall()}`. 
+Les events du DOM sont les évènements classiques que chaque navigateur gère par défaut. Le plus pratique d'entre eux est le `v-on:click`, vu précédemment, qui s'active lorsqu'on clique avec la souris sur l'élément html associé. Il nous permet de lancer une fonction, avec le schéma `v-on:click={methodToCall}`. 
 
-Pour illustrer cette fonctionnalité, nous allons créer un compteur avec une nouvelle page `/pages/count/+page.vue` : 
+Pour illustrer cette fonctionnalité, nous allons créer un compteur avec une nouvelle page `/pages/count.vue` : 
 
 ```vue
-<script lang="ts">
-    let count: number = 0;
+<script setup lang="ts">
+import { ref } from 'vue';
+
+    let num = ref(0);
 
     function increment() {
-        count += 1;
+        num.value++;
     }
 
     function decrement() {
-        count -= 1;
+        num.value--;
     }
-
+    
 </script>
 
-<h1>Count</h1>
 
-<button on:click={decrement}>-</button>
-<p>Count: {count}</p>
-<button on:click={increment}>+</button>
+<template>
+  <div>
+
+    <button v-on:click="decrement" >-</button>
+    <p>{{ num }}</p>
+    <button v-on:click="increment" >+</button>
+
+  </div>
+</template>
+
 ```
 
 ## Les conditions et les boucles
 
-Avec SvelteKit, il est possible de manipuler l'html en fonction des variables. En effet, on peut afficher un bloc en fonction d'une condition, répéter un bloc par rapport à une liste ou encore afficher différents blocs en fonction de l'état d'avancement d'une requête API.
+Avec NuxtJS, il est possible de manipuler l'html en fonction des variables. En effet, on peut afficher un bloc en fonction d'une condition, répéter un bloc par rapport à une liste ou encore afficher différents blocs en fonction de l'état d'avancement d'une requête API.
 
 **Bloc conditionnel**
 
-Pour afficher un bloc d'html en fonction d'une condition, on utilisera le pattern `{#if condition}{:else if}{:else}{/if}`. Modifions la `/pages/count/+page.vue` pour afficher un message pour savoir si le nombre affiché est pair ou impair : 
+Pour afficher un bloc d'html en fonction d'une condition, on utilisera le pattern `v-if`. Modifions la `/pages/count.vue` pour afficher un message pour savoir si le nombre affiché est pair ou impair : 
 
 ```vue
-<script lang="ts">
-    let count: number = 0;
+<script setup lang="ts">
+import { ref } from 'vue';
+
+    let num = ref(0);
 
     function increment() {
-        count += 1;
+        num.value++;
     }
 
     function decrement() {
-        count -= 1;
+        num.value--;
     }
-
+    
 </script>
 
-<h1>Count</h1>
 
-<button on:click={decrement}>-</button>
-<p>Count: {count}</p>
-<button on:click={increment}>+</button>
+<template>
+  <div>
 
-{#if count % 2 === 0}
-    <p>Count is even</p>
-{:else}
-    <p>Count is odd</p>
-{/if}
+    <button v-on:click="decrement" >-</button>
+    <p>{{ num }}</p>
+    <button v-on:click="increment" >+</button>
+
+    <p v-if="num%2===0">The count is even</p>
+    <p v-else>The count is odd</p>
+
+  </div>
+</template>
 ```
 
 **Boucle**
 
-Si on veut répéter un bloc html pour afficher les différents éléments d'une liste, on utilisera le pattern `{#each list as element, i}{/each}`. `list` étant la variable contenant la variable sur laquelle itérer, `element` étant une nouvelle variable créée pour l'itération en cours, `i` est optionnel et correspond à l'index de l'itération en cours. Créons une nouvelle page `/pages/todo/+page.vue` pour afficher une todolist : 
+Si on veut répéter un bloc html pour afficher les différents éléments d'une liste, on utilisera le pattern `v-for`. Créons une nouvelle page `/pages/todo.vue` pour afficher une todolist : 
 
 ```vue
-<script lang="ts">
+<script setup lang="ts">
+
     let todoList: string[] = ['walk the dog', 'exercise', 'eat a fruit'];
+    
 </script>
 
-<h1>Todo</h1>
 
-<ul>
-    {#each todoList as todo}
-        <li>{todo}</li>
-    {/each}
-</ul>
+<template>
+  <div>
+
+        <ul>
+            <li v-for="todo in todoList">{{todo}}</li>
+        </ul>
+
+  </div>
+</template>
+
 ```
-
-**Affichage en attente d'une requête**
-
-L'une des fonctionnalités intéressante de JavaScript est la possibilité d'envoyer des requêtes asynchrones à des services web. Du fait de leur nature, il faut que l'interface sache gérer 3 possibilités : 
- * le chargement des données
- * le succès de la requête
- * l'échec de la requête
-
-SvelteKit permet de faire ça simplement avec le pattern `{#await method()}{:then }{:catch }{/await}`. Créons une nouvelle page `/pages/await/+page.vue` pour afficher une image de chat après avoir réussi une requête API : 
-
-```vue
-<script lang="ts">
-
-    async function fetchPokemon() {
-        return await fetch('https://api.thecatapi.com/v1/images/search')
-            .catch(err => {
-                console.error(err);
-                return err;
-            })
-            .then(async (response) => {                
-                return response.json();
-            })
-            .then(data => {
-                return data[0].url;
-            });
-    }
-</script>
-
-{#await fetchPokemon()}
-    loading...
-{:then url}
-<img src="{url}" alt="">
-{:catch e}
-    An error happened : {e.message}
-{/await}
-```
-
-Vous pouvez constater que le temps que la requête soit complète, un message apparait. Contrairement à notre précédente page `/pages/cat/+page.vue` qui n'affiche rien pendant le chargement.
 
 ## Les variables réactives
 
 ```vue
-<script lang="ts">
-    let number: number = 0;
+<script setup lang="ts">
+import { computed, reactive, ref } from 'vue';
 
-    $:double = number * 2;
-    $:quadruple = double * 2;
-    $:half = number / 2;
-    $:square = number ** 2;
+    let state = reactive({
+        number: 0
+    });
+
+    const double = computed(() => state.number * 2);
+    const quadruple = computed(() => double.value * 2);
+    const half = computed(() => state.number / 2);
+    const square = computed(() => state.number ** 2);
+    
 </script>
 
-<h1>Reactive</h1>
-
-<input type="number" bind:value={number}>
-
-<p>{number} * 2 = {double}</p>
-<p>{number} * 4 = {quadruple}</p>
-<p>{number} / 2 = {half}</p>
-<p>{number}² = {square}</p>
+<template>
+    <div>
+        <input type="number" v-model="state.number">
+        <p>The number is: {{ state.number }}</p>
+        <p>The double is: {{ double }}</p>
+        <p>The quadruple is: {{ quadruple }}</p>
+        <p>The half is: {{ half }}</p>
+        <p>The square is: {{ square }}</p>
+    </div>
+</template>
 ```
 
 ## Créer un layout
@@ -702,23 +660,6 @@ import Header from "$lib/Header.vue";
 
 ![11-css](../../../../../assets/js/nodejs/svelte/sveltekit/11-css.png)
 
-## Les animations
-
-```vue
-<script>
-	import { fade } from 'svelte/transition';
-	let visible = true;
-</script>
-
-<label>
-	<input type="checkbox" bind:checked={visible} />
-	visible
-</label>
-
-{#if visible}
-	<p transition:fade>Fades in and out</p>
-{/if}
-```
 
 ## Le store
 
@@ -782,21 +723,3 @@ export const number = writable(0);
 <p>{$number}² = {square}</p>
 
 ```
-
-## Une application fullstack ?
-
-```ts
-// /pages/api/hello-world/+server.ts
-
-import type { RequestHandler } from './$types';
-import { json } from '@sveltejs/kit'
-
-
-export const GET: RequestHandler = async () => {
-    
-    
-      return json({ 'hello': 'world' })
-};
-```
-
-## Déployer
