@@ -20,19 +20,17 @@
 - [Le store](#le-store)
 
 
-## Présentation de svelte
+## Présentation de Vuejs
 
-Svelte est un framework mis au point par Rich Harris en 2016. Son objectif était de créer un outil pour développer des applications front-end simples et légères. Pour cela, Svelte fait le gros du travail lors du build de l'application et non pas au moment de l'affichage par le navigateur et l'interprétation du code. C'est pour cette raison qu'on considère davantage Svelte comme un compilateur qu'un framework.
+//TODO
 
-Svelte se base sur HTML, CSS et JS/TS. Il n'est pas nécessaire d'apprendre un nouveau langage pour l'utiliser (contrairement à React) et, du fait qu'il n'embarque pas beaucoup de mots-clefs, on peut commencer à l'utiliser avec des notions basiques de front-end.
+## Présenation de Nuxtjs
 
-## Présenation de sveltekit
-
-Sveltekit est à Svelte ce que NextJS est à React et NuxtJS est à Vue : un framework qui se base sur un autre et qui y incorpore des fonctionnalités avancées pour créer des sites webs. Sveltekit permet entre autre de créer des appliations SPA, SSR et SSG. Il intègre le routeur automatique par arborescence de fichiers.
+//TODO
 
 ## Création d'un projet
 
-Pour créer un projet Sveltekit, il faut avoir installé NodeJS v18 au minimum. Lancez ensuite la commande suivante : 
+Pour créer un projet Nuxtjs, il faut avoir installé NodeJS v18 au minimum. Lancez ensuite la commande suivante : 
 
 ```bash
 npx nuxi@latest init nom-de-mon-appli
@@ -58,7 +56,7 @@ Fichier de configuration pour le linter typescript.
 
 **nuxt.config.ts**
 
-Fichier de configuration pour le projet svelte
+Fichier de configuration pour le projet nuxtjs
 
 **package.json**
 
