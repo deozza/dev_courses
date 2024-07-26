@@ -1,4 +1,0 @@
-# MySQL <!-- omit in toc -->
-
-## Sommaire <!-- omit in toc -->
-
