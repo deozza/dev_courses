@@ -1,4 +1,4 @@
-# MySQL <!-- omit in toc -->
+# Clean code <!-- omit in toc -->
 
 ## Sommaire <!-- omit in toc -->
 

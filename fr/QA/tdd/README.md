@@ -1,13 +1,29 @@
-# Test Driven Development
+# Test Driven Development <!-- omit in toc -->
 
-## Sommaire
+## Sommaire  <!-- omit in toc -->
 
- 1. Introduction aux tests
-   * Pourquoi tester
-   * Les différents types de test
- 2. Description du TDD
- 3. L'intérêt de faire du TDD
- 4. Méthode pour en faire
+- [Introduction aux tests](#introduction-aux-tests)
+  - [Pourquoi écrire des testes](#pourquoi-écrire-des-testes)
+  - [Les différents types de test](#les-différents-types-de-test)
+    - [Unitaire](#unitaire)
+    - [Fonctionnel](#fonctionnel)
+    - [De non-régression](#de-non-régression)
+- [L'intérêt de faire du TDD](#lintérêt-de-faire-du-tdd)
+- [Description du TDD](#description-du-tdd)
+  - [Développement classique](#développement-classique)
+  - [Développement en TDD](#développement-en-tdd)
+  - [Conclusion](#conclusion)
+- [Méthode pour faire du TDD](#méthode-pour-faire-du-tdd)
+  - [Premier tour](#premier-tour)
+  - [Deuxième tour](#deuxième-tour)
+  - [Exemple :](#exemple-)
+    - [Premier tour](#premier-tour-1)
+    - [Deuxième tour](#deuxième-tour-1)
+    - [Troisième tour](#troisième-tour)
+    - [Quatrième tour](#quatrième-tour)
+    - [Cinquième tour](#cinquième-tour)
+    - [Sixième tour](#sixième-tour)
+
 
 ## Introduction aux tests
 

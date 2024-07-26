@@ -1,9 +1,30 @@
-## Sommaire du cours sur la refactorisation
+# La refactorisation <!-- omit in toc -->
 
- 1. Qu'est-ce que c'est
- 2. Pourquoi en faire
- 3. Avant d'en faire
- 4. Les méthodes
+## Sommaire <!-- omit in toc -->
+
+- [Qu'est-ce que c'est](#quest-ce-que-cest)
+- [Les raisons](#les-raisons)
+  - [Gagner en compréhension du métier](#gagner-en-compréhension-du-métier)
+  - [Faciliter les tests (et le debuggage)](#faciliter-les-tests-et-le-debuggage)
+  - [Faciliter l'implémentation de nouvelles fonctionnalités](#faciliter-limplémentation-de-nouvelles-fonctionnalités)
+- [Le prérequis](#le-prérequis)
+  - [Comprendre comment le code fonctionne](#comprendre-comment-le-code-fonctionne)
+    - [Lire la doc](#lire-la-doc)
+    - [Lire les tests](#lire-les-tests)
+    - [Exécuter le code en posant du debuggage](#exécuter-le-code-en-posant-du-debuggage)
+  - [Schématiser le fonctionnement](#schématiser-le-fonctionnement)
+    - [A l'écrit](#a-lécrit)
+    - [Tableau des valeurs](#tableau-des-valeurs)
+    - [Faire son diagramme de séquence simplifié](#faire-son-diagramme-de-séquence-simplifié)
+- [Les méthodes](#les-méthodes)
+  - [Renommage de fonctions et de variables](#renommage-de-fonctions-et-de-variables)
+  - [Supprimer le code mort (commentaires)](#supprimer-le-code-mort-commentaires)
+  - [Extraire les fonctions](#extraire-les-fonctions)
+  - [Supprimer les duplicatas](#supprimer-les-duplicatas)
+  - [Fail fast](#fail-fast)
+  - [Meilleure utilisation du typage](#meilleure-utilisation-du-typage)
+  - [Meilleure utilisation du framework](#meilleure-utilisation-du-framework)
+
 
 ## Qu'est-ce que c'est
 

@@ -1,16 +1,22 @@
-# Cours complet de PHP
+# Cours complet de PHP <!-- omit in toc -->
 
-## Sommaire
- 1. La syntaxe de base
- 2. Les variables
- 3. Les opérations mathématiques
- 4. Le typage
- 5. Les opérateurs de comparaison
- 6. Les boucles
- 7. Les fonctions de base et utiles de PHP
- 8. Les fonctions
- 9. Les classes et ce qui va avec
- 10. Le PHPDoc
+
+## Sommaire <!-- omit in toc -->
+
+- [La syntaxe de base :](#la-syntaxe-de-base-)
+- [Les variables](#les-variables)
+- [Les opérations mathématiques](#les-opérations-mathématiques)
+- [Le typage](#le-typage)
+- [Les opérateurs de comparaison](#les-opérateurs-de-comparaison)
+- [Les boucles](#les-boucles)
+- [Les conditions :](#les-conditions-)
+- [Les fonctions de base et utiles de PHP](#les-fonctions-de-base-et-utiles-de-php)
+- [Les fonctions](#les-fonctions)
+- [Les classes et ce qui va avec](#les-classes-et-ce-qui-va-avec)
+	- [Un objet](#un-objet)
+	- [Une classe](#une-classe)
+	- [Utiliser une classe](#utiliser-une-classe)
+- [Le PHPDoc](#le-phpdoc)
 
 ## La syntaxe de base :
 
