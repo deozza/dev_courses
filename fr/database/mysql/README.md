@@ -127,24 +127,25 @@ desc <table_name>;
 
 ### Les types de propriétés
 
-| type      | description |
-| --------- | ----------- |
-| VARCHAR   |             |
-| INT       |             |
-| FLOAT     |             |
-| BOOLEAN   |             |
-| DATETIME  |             |
-| TIMESTAMP |             |
-
+| type      | description                             |
+| --------- | --------------------------------------- |
+| VARCHAR   | chaine de caractères                    |
+| INT       | nombre entier                           |
+| FLOAT     | nombre à virgule flottante              |
+| BOOLEAN   | true ou false                           |
+| DATETIME  | date et heure                           |
+| TIMESTAMP | temps écoule en ms depuis le 01/01/1970 |
 
 ### Les options pour les propriétés
 
-| options        | description |
-| -------------- | ----------- |
-| NOT NULL       |             |
-| UNIQUE         |             |
-| AUTO_INCREMENT |             |
-| DEFAULT        |             |
+| options        | description                                                                   |
+| -------------- | ----------------------------------------------------------------------------- |
+| NOT NULL       | La propriété ne peut être vide                                                |
+| UNIQUE         | La valeur ne peut pas être répétée dans la table                              |
+| AUTO_INCREMENT | La valeur est un INT qui augmente de 1 à chaque nouvel enregistrement         |
+| DEFAULT        | Spécifier quelle est la valeur par défaut si aucune n'est fournie             |
+| PRIMARY KEY    | Cette propriété servira d'identifiant pour les enregistrements                |
+| FOREIGN KEY    | Cette propriété servira d'identifiant pour les relations avec d'autres tables |
 
 ### La primary key
 
