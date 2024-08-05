@@ -9,6 +9,12 @@
   - [Propriété](#propriété)
   - [Données](#données)
 - [Modéliser une base de données : le MCD](#modéliser-une-base-de-données--le-mcd)
+  - [Merise](#merise)
+  - [Le MCD](#le-mcd)
+    - [Les entités](#les-entités)
+    - [Les relations](#les-relations)
+    - [Les propriétés](#les-propriétés)
+    - [Les cardinalités](#les-cardinalités)
 
 ## Définition
 
@@ -126,7 +132,7 @@ Pour une table `user`, on pourra avoir les propriétés suivantes :
 | Alice     | Johnson  | 1978/11/23  | 0      |
 | Bob       | Brown    | 2000/02/29  | 1      |
 
-**Les types de propriété :s**
+**Les types de propriété :**
 
 | type      | description                             |
 | --------- | --------------------------------------- |
@@ -149,4 +155,57 @@ Pour une table `user`, on pourra avoir les propriétés suivantes :
 | FOREIGN KEY    | Cette propriété servira d'identifiant pour les relations avec d'autres tables |
 
 ## Modéliser une base de données : le MCD
-`
+
+### Merise
+
+Merise est une méthode utilisée pour modéliser des systèmes d'informations. Elle fournit des étapes à suivre pour faciliter  leur mise en place.
+
+### Le MCD
+
+Le MCD, ou Modèle Conceptuel des données, est la première étape de la méthode Merise et celle qui nous intéresse ici.
+
+C'est une représentation graphique permettant de comprendre quels éléments composent un système, quelles sont les données qu'ils gèrent, et comment ces éléments intéragissent entre eux.
+
+Pour produire un MCD, la personne en charge devra se fier à des spécifications techniques qu'on lui aura fournies, des interviews avec les clients/utilisateurs, des règles de gestion du métier, un ou des systèmes existants, ...
+
+Un MCD se compose :
+
+- d'entités (en rectangle)
+- de relations (en oval et avec des traits reliant les entités)
+- de propriétés dans les entités et parfois les relations
+- de cardinalités (chiffres au dessus des traits entre les entités et relation)
+
+#### Les entités
+
+On désigne par entité dans un MCD un concept, un objet, un acteur, qui participe à notre système d'informations, qui manipule de la données et qui sera manipulé par le système. Une entité se caractérise par un nom et des propriétés.
+
+#### Les relations
+
+Les relations est le lien entre 2 ou plus entités. Ce sont elles qui caractérisent les systèmes dits relationnels (le R dans SGBDR). Une relation est définie par un verbe d'action permettant de comprendre comment les entités concernées sont liées entre elles, par des cardinalitées et parfois des propriétés.
+
+#### Les propriétés
+
+Les propriétés sont informations qui seront stockées puis manipulées par nos entités et leurs relations. Elles sont définies par un nom, unique au sein de l'entité ou de la relation, un type, et de leur options (FOREIGN KEY, NOT NULL, UNIQUE, ...).
+
+#### Les cardinalités
+
+Les cardinalités sont un outil permettant de comprendre les règles de gestion dans un système d'informations et d'apporter des contraintes sur les relations entre les entités. En effet, on peut savoir grâce à elles, combien d'exemplaires de l'eentité A peuvent être liés à l'entité B, et combien d'exemplaires de l'entité B peuvent être liés à l'entité A.
+
+C'est pour cela que les cardinalités sont toujours en couples (une pour chaque côté de la relation) et avec 2 valeurs (un minimum et un maximum). En général, voici les valeurs que l'on donne aux cardinalités :
+
+| valeurs | description                      |
+| ------- | -------------------------------- |
+| 0,1     | aucun ou 1 exemplaire au maximum |
+| 0,N     | aucun ou plusieurs exemplaires   |
+| 1,N     | au moins un exemplaire           |
+| 1,1     | 1 exemplaire                     |
+
+**Exemple :**
+
+![MCD](../../assets/database/MCD_UML_1.gif)
+
+Dans cet MCD, on a une relation entre l'entité ARTICLE et l'entité LIGNE COMMANDE. Il faut lire : 
+
+> une ligne commande est forcément rattachée à un article
+
+> un article peut ne pas être lié à ligne commande, ou être lié à une infinité

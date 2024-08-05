@@ -17,6 +17,11 @@
   - [SELECT ... FROM](#select--from)
   - [WHERE](#where)
   - [ORDER BY](#order-by)
+  - [LIMIT](#limit)
+  - [Les opérations mathématiques](#les-opérations-mathématiques)
+  - [Les opérations sur chaines de caractères](#les-opérations-sur-chaines-de-caractères)
+  - [GROUP BY](#group-by)
+  - [HAVING](#having)
 - [Les jointures de table](#les-jointures-de-table)
 
 
@@ -32,6 +37,10 @@ Utiliser l'installateur officiel :
 
 https://dev.mysql.com/downloads/installer/
 
+Ou installer wamp :
+
+https://wampserver.aviatechno.net/
+
 **Sur Mac :**:
 
 Utiliser brew. Dans un terminal : 
@@ -46,6 +55,10 @@ brew services start mysql
 mysqladmin -u root password 'your-password'
 ```
 
+Ou installer xampp :
+
+https://www.apachefriends.org/fr/index.html
+
 **Sur Linux :**
 
 Dans un terminal : 
@@ -59,6 +72,10 @@ sudo systemctl start mysql
 
 mysqladmin -u root password 'your-password'
 ```
+
+Ou installer lamp :
+
+https://doc.ubuntu-fr.org/lamp
 
 **Avec Docker :**
 
@@ -123,7 +140,20 @@ desc <table_name>;
 
 ## Créer une base de données
 
+```sql
+CREATE DATABASE first_database;
+```
+
 ## Créer une table
+
+```sql
+CREATE TABLE user (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    dateOfBirth DATE
+);
+```
 
 ### Les types de propriétés
 
@@ -149,24 +179,166 @@ desc <table_name>;
 
 ### La primary key
 
+Une clef primaire est un moyen d'identifier une entrée dans une table. Cette option permet également de rapidement accéder à cette entrée si on utilise la propriété associée, car celle-ci sera indexée dans le système. 
+
+Utiliser primary key implique que la propriété associée devra : 
+
+- avoir des valeurs uniques
+- être non null
+
 ## Relier des tables entre elles
 
+Pour représenter la relation MCD entre deux tables, il faut dans un premier temps repérer quelle table "possède" la relation. Ensuite, il faut rajouter une propriété dans cette table qui pourra faire le lien avec l'autre table de la relation. Enfin, rajouter dans la table possédant la relation une ligne suivant le modèle : 
+
+```sql
+FOREIGN KEY (propriété_locale) REFERENCES table(propriété_étrangère)
+```
+
+**Exemple :**
+
+```sql
+CREATE TABLE class (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(255) NOT NULL
+)
+
+CREATE TABLE students (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    firstname VARCHAR(255) NOT NULL,
+    lastname VARCHAR(255) NOT NULL,
+    dateOfBirth DATE,
+    class_id INT,
+    FOREIGN KEY (class_id) REFERENCES class(id)
+);
+```
+
 ## Insérér des données
+
+Syntaxe :
+
+```sql
+INSERT INTO table(property1, property2, property3, ...) VALUES ('value1', 'value2', 'value3', ...);
+```
 
 ## Chercher des données
 
 ### SELECT ... FROM
 
+Syntaxe :
+
+```sql
+SELECT property1, property2, ... FROM table;
+```
+
+```sql
+SELECT * FROM table;
+```
+
 ### WHERE
+
+Syntaxe :
+
+```sql
+SELECT property1, property2, ... FROM table WHERE property4 = condition;
+```
+
+| comparateur  | description                        |
+| ------------ | ---------------------------------- |
+| =            | vaut exactement                    |
+| >            | est strictement supérieur à        |
+| >=           | est supérieur ou égal à            |
+| <            | est strictement inférieur à        |
+| LIKE '%...'  | chaine de caractère finissant par  |
+| LIKE '...%'  | chaine de caractère commençant par |
+| LIKE '%...%' | chaine de caractère contenant      |
+| BETWEEN      | est entre                          |
 
 ### ORDER BY
 
+```sql
+SELECT property1, property2, ... FROM table WHERE property4 = condition ORDER BY property3;
+```
+
+| comparateur | description                                           |
+| ----------- | ----------------------------------------------------- |
+| ASC         | ascending => sens croissant (comportement par défaut) |
+| DESC        | descending => sens décroissant                        |
+
+### LIMIT
+
+Pour limiter le nombre de résultats obtenus par la requête.
+
+```sql
+SELECT property1, property2, ... FROM table WHERE property4 = condition LIMIT 1;
+```
+
+Associé à l'ORDER BY, permet d'obtenir la dernière entrée d'une table :
+
+```sql
+SELECT property1, property2, ... FROM table WHERE property4 = condition ORDER BY id DESC LIMIT 1;
+```
+
+### Les opérations mathématiques
+
+| opérateurs                | description                       |
+| ------------------------- | --------------------------------- |
+| AVG(property)             | moyenne                           |
+| MAX(property)             | valeur maximale                   |
+| MIN(property)             | valeur minimale                   |
+| FLOOR(property, decimals) | arrondi à l'inférieur             |
+| CEIL(property, decimals)  | arrondi au supérieur              |
+| COUNT(property)           | nombre d'occurences dans la table |
+
+
+### Les opérations sur chaines de caractères
+
+| opérateurs                                 | description                                        |
+| ------------------------------------------ | -------------------------------------------------- |
+| LENGTH(property)                           | taille d'une chaine de caractères                  |
+| UPPER(property)                            | met la chaîne en majuscule                         |
+| LOWER(property)                            | met la chaîne en minuscule                         |
+| CONCAT(string1, string2)                   | concatène plusieurs chaînes de caractères          |
+| SUBSTR(value, startAt, numberOfCharacters) | Extrait une sous-chaine de caractères d'une chaine |
+
+### GROUP BY
+
+Utilisé pour grouper les résultats d'une requête entre une ou plusieurs tables, souvent utilisé avec des aggrégateurs mathématiques. Par exemple : 
+
+*Requête pour savoir de quelles villes viennent le plus les clients d'une applicationn*
+
+```sql
+SELECT COUNT(City), City
+FROM Customers
+GROUP BY City
+ORDER BY COUNT(City) DESC
+;
+```
+
+### HAVING
+
+Il est impossible de faire un `SELECT` après un `GROUP BY`. Donc on utilise `HAVING` :
+
+*Requête pour savoir de quelles villes viennent le plus les clients d'une applicationn, en ne prenant en compte que les villes avec plus de 10 caractères dans leur nom*
+
+```sql
+SELECT COUNT(City), City
+FROM Customers
+GROUP BY City
+HAVING LENGTH(City) > 10
+ORDER BY COUNT(City) DESC
+;
+```
+
 ## Les jointures de table
 
+```sql
+SELECT property1, property2, propertyA, propertyB... 
+FROM table_a 
+INNER JOIN table_b ON table_a.id = table_b.table_a_id;
+```
 
-| options    | description |
-| ---------- | ----------- |
-| LEFT JOIN  |             |
-| RIGHT JOIN |             |
-| INNER JOIN |             |
-
+| options    | description                                                    |
+| ---------- | -------------------------------------------------------------- |
+| LEFT JOIN  | au moins la partie gauche de la jointure répond à la condition |
+| RIGHT JOIN | au moins la partie droite de la jointure répond à la condition |
+| INNER JOIN | les deux parties de la jointure répondent à la condition       |
