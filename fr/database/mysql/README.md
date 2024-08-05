@@ -7,11 +7,14 @@
 - [Installation](#installation)
 - [Premiers pas sur le serveur](#premiers-pas-sur-le-serveur)
 - [Créer une base de données](#créer-une-base-de-données)
+- [Supprimer une base de données](#supprimer-une-base-de-données)
 - [Créer une table](#créer-une-table)
   - [Les types de propriétés](#les-types-de-propriétés)
   - [Les options pour les propriétés](#les-options-pour-les-propriétés)
   - [La primary key](#la-primary-key)
 - [Relier des tables entre elles](#relier-des-tables-entre-elles)
+- [Supprimer une table](#supprimer-une-table)
+- [Modifier une table](#modifier-une-table)
 - [Insérér des données](#insérér-des-données)
 - [Chercher des données](#chercher-des-données)
   - [SELECT ... FROM](#select--from)
@@ -23,6 +26,7 @@
   - [GROUP BY](#group-by)
   - [HAVING](#having)
 - [Les jointures de table](#les-jointures-de-table)
+- [Mettre à jour des données](#mettre-à-jour-des-données)
 
 
 ## Définition
@@ -144,6 +148,13 @@ desc <table_name>;
 CREATE DATABASE first_database;
 ```
 
+## Supprimer une base de données
+
+```sql
+DROP DATABASE table IF EXISTS
+;
+```
+
 ## Créer une table
 
 ```sql
@@ -210,6 +221,48 @@ CREATE TABLE students (
     class_id INT,
     FOREIGN KEY (class_id) REFERENCES class(id)
 );
+```
+
+## Supprimer une table
+
+**Supprimer avec les données :**
+
+```sql
+DROP TABLE table IF EXISTS
+;
+```
+
+**Uniquement supprimer les données :**
+
+```sql
+TRUNCATE TABLE table IF EXISTS
+;
+```
+
+## Modifier une table
+
+**Rajouter une colonne dans une table :**
+
+```sql
+ALTER TABLE table
+ADD nom_colonne type_donnees
+;
+```
+
+**Supprimer une colonne d'une table :**
+
+```sql
+ALTER TABLE table
+DROP nom_colonne
+;
+```
+
+**Modifier une colone d'une table :**
+
+```sql
+ALTER TABLE table
+MODIFY nom_colonne type_donnees
+;
 ```
 
 ## Insérér des données
@@ -342,3 +395,12 @@ INNER JOIN table_b ON table_a.id = table_b.table_a_id;
 | LEFT JOIN  | au moins la partie gauche de la jointure répond à la condition |
 | RIGHT JOIN | au moins la partie droite de la jointure répond à la condition |
 | INNER JOIN | les deux parties de la jointure répondent à la condition       |
+
+## Mettre à jour des données
+
+```sql
+UPDATE TABLE
+SET property1 = value
+WHERE property2 > condition 
+;
+```
