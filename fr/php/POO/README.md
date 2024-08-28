@@ -395,6 +395,9 @@ Exemples :
 
 ## Le constructeur
 
+- fait partie des `méthodes magiques` de PHP
+  - avec `__call`, `__invoke`, `__toString`, `__serialize`, ...
+  - c'est sûrement la plus commune de toutes  
 - permet d'obliger l'instanciation de propriété lors de la création de la classe
 
 Au lieu de faire :
