@@ -13,6 +13,7 @@
 - [Les constantes](#les-constantes)
 - [Les méthodes](#les-méthodes)
 - [Le mot clef this](#le-mot-clef-this)
+- [Le constructeur](#le-constructeur)
 - [Récapitulatif](#récapitulatif)
 - [L'héritage](#lhéritage)
 - [Accessibilité des méthodes et des propriétés](#accessibilité-des-méthodes-et-des-propriétés)
@@ -391,6 +392,93 @@ Exemples :
 ```
 
 - remarquez dans l'exemple le mot clef `self` qui permet d'utiliser des constantes de classe à l'intérieure de celles-ci
+
+## Le constructeur
+
+- permet d'obliger l'instanciation de propriété lors de la création de la classe
+
+Au lieu de faire :
+
+```php
+<?php
+ class User{
+    const int AGE_OF_MAJORITY = 18;
+
+    string $name;
+    int $age;
+
+    function setName(string $name): self {
+      $this->name = $name;
+      return $this;
+    }
+
+    function setAge(int $age): self {
+      $this->age = $age;
+      return $this;
+    }
+ }
+
+ $user1 = new User()->setName('Vincent')->setAge(10);
+?>
+```
+
+Permet de faire :
+
+```php
+<?php
+ class User{
+    const int AGE_OF_MAJORITY = 18;
+
+    string $name;
+    int $age;
+
+    function __construct(string $name, int $age) {
+      $this->name = $name;
+      $this->age = $age;
+    }
+
+    function setName(string $name): self {
+      $this->name = $name;
+      return $this;
+    }
+
+    function setAge(int $age): self {
+      $this->age = $age;
+      return $this;
+    }
+ }
+
+ $user1 = new User('Vincent', 10);
+?>
+```
+
+- depuis PHP 8, on peut créer des propriétés directement avec le constructeur :
+  - on appelle ça la `property promotion`
+
+```php
+<?php
+ class User{
+    const int AGE_OF_MAJORITY = 18;
+
+    function __construct(public string $name, public int $age) {
+      $this->name = $name;
+      $this->age = $age;
+    }
+
+    function setName(string $name): self {
+      $this->name = $name;
+      return $this;
+    }
+
+    function setAge(int $age): self {
+      $this->age = $age;
+      return $this;
+    }
+ }
+
+ $user1 = new User('Vincent', 10);
+?>
+```
 
 ## Récapitulatif
 
