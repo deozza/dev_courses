@@ -19,8 +19,8 @@
 - [Accessibilité des méthodes et des propriétés](#accessibilité-des-méthodes-et-des-propriétés)
 - [Les interfaces](#les-interfaces)
 - [Les classes abstraites](#les-classes-abstraites)
-- [Ecrire un routeur](#ecrire-un-routeur)
 - [Ecrire un ORM](#ecrire-un-orm)
+- [Ecrire un routeur](#ecrire-un-routeur)
 
 ## Définition
 
@@ -690,12 +690,12 @@ $command->execute();
 - permettent d'obliger des classes à respecter des signatures particulières
   - définissent les méthodes et les propriétés, ainsi que leurs types, qu'une classe doit comporter au minimum
   - ne définissent pas en revanche le contenu des méthodes
-- permettent d'embarquer des méthodes communes
+- grâce l'héritage, permettent d'embarquer des méthodes communes
 
 ```php
 <?php
 
- abstract class AnimalInterface {
+ abstract class Animal {
    protected $name;
    protected $species;
 
@@ -706,19 +706,19 @@ $command->execute();
    }
  }
 
- class Cat extends AnimalInterface {
+ class Cat extends Animal {
    public function eating(): string {
       return "I eat meat and fish";
    }
  }
 
- class Cow extends AnimalInterface{
+ class Cow extends Animal{
    public function eating(): string {
       return "I eat grass";
    }
  }
 
- class Socialist extends AnimalInterface{
+ class Socialist extends Animal{
    public function eating(): string {
       return "I eat the richs";
    }
@@ -740,6 +740,8 @@ $animal->eating();
 
 - il n'est pas possible d'étendre plusieurs classes abstraites pour une même classe
 
-## Ecrire un routeur
-
 ## Ecrire un ORM
+
+
+
+## Ecrire un routeur
