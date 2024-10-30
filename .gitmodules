@@ -1,0 +1,36 @@
+[submodule "fr/QA/blackjack"]
+	path = fr/QA/blackjack
+	url = https://github.com/deozza/blackjack
+[submodule "fr/QA/tdd/symfony-tdd-exercices"]
+	path = fr/QA/tdd/symfony-tdd-exercices
+	url = https://github.com/deozza/symfony-tdd-exercices
+[submodule "fr/QA/tdd/tdd-exercices-js"]
+	path = fr/QA/tdd/tdd-exercices-js
+	url = https://github.com/deozza/tdd-exercices-js
+[submodule "fr/best_practices/clean_code/cleancode-js"]
+	path = fr/best_practices/clean_code/cleancode-js
+	url = https://github.com/deozza/cleancode-js
+[submodule "fr/best_practices/clean_code/cleancode-js-devoir"]
+	path = fr/best_practices/clean_code/cleancode-js-devoir
+	url = https://github.com/deozza/cleancode-js-devoir
+[submodule "fr/php/POO/php-oop-course"]
+	path = fr/php/POO/php-oop-course
+	url = https://github.com/deozza/php-oop-course
+[submodule "fr/php/POO/php-framework"]
+	path = fr/php/POO/php-framework
+	url = https://github.com/deozza/php-framework
+[submodule "fr/best_practices/refactorisation/refactorisation_projet"]
+	path = fr/best_practices/refactorisation/refactorisation_projet
+	url = https://github.com/deozza/refactorisation_projet
+[submodule "fr/best_practices/refactorisation/refactorisation_exercices"]
+	path = fr/best_practices/refactorisation/refactorisation_exercices
+	url = https://github.com/deozza/refactorisation_exercices/
+[submodule "fr/js/nodejs/vuejs/nuxtjs/explo-frontend-nuxtjs"]
+	path = fr/js/nodejs/vuejs/nuxtjs/explo-frontend-nuxtjs
+	url = https://github.com/deozza/explo-frontend-nuxtjs
+[submodule "fr/js/nodejs/svelte/sveltekit/explo-frontend-sveltekit"]
+	path = fr/js/nodejs/svelte/sveltekit/explo-frontend-sveltekit
+	url = https://github.com/deozza/explo-frontend-sveltekit
+[submodule "fr/js/nodejs/svelte/sveltekit/svelte-pokedex"]
+	path = fr/js/nodejs/svelte/sveltekit/svelte-pokedex
+	url = https://github.com/deozza/svelte-pokedex
