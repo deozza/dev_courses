@@ -1,0 +1,9 @@
+services:
+    php-oop-course:
+        container_name: php-oop-course
+        build: .
+        volumes: 
+             - ./app:/var/www/html
+             - ./logs:/var/log/apache2/
+        ports:
+             - 8080:80

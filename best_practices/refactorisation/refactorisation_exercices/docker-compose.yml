@@ -1,0 +1,17 @@
+version: "3"
+services:
+  refacto-exercices-php:
+    container_name: refacto-exercices-php
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+      - HOST=0.0.0.0
+    ports:
+      - '8888:8000'
+    volumes:
+      - ./:/home/refactorisation_exercices:cached

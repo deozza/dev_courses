@@ -1,0 +1,9 @@
+services:
+    php-framework:
+        container_name: php-framework
+        build: .
+        volumes: 
+             - ./app:/var/www/html
+             - ./logs:/var/log/apache2/
+        ports:
+             - 8080:80

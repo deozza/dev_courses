@@ -1,0 +1,10 @@
+App\Entity\User:
+    user_1:
+        name: John
+        age: 25
+    user_2:
+        name: Jane
+        age: 22
+    user_3:
+        name: Jack
+        age: 27

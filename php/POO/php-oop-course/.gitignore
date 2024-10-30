@@ -1,0 +1,5 @@
+/logs/*
+!/logs/.gitkeep
+/app/vendor/*
+/app/src/*
+!/app/src/index.php

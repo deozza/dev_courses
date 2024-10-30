@@ -1,0 +1,44 @@
+App\Entity\Game:
+    game_1:
+        state: pending
+        playerLeft: '@user_1'
+        playerRight: null
+        playRight: null
+        playLeft: null
+        result: null
+    game_2:
+        state: ongoing
+        playerLeft: '@user_1'
+        playerRight: '@user_2'
+        playRight: null
+        playLeft: null
+        result: null
+    game_3:
+        state: ongoing
+        playerLeft: '@user_1'
+        playerRight: '@user_2'
+        playRight: null
+        playLeft: 'scissors'
+        result: null
+    game_4:
+        state: finished
+        playerLeft: '@user_1'
+        playerRight: '@user_2'
+        playRight: 'scissors'
+        playLeft: 'paper'
+        result: 'winLeft'
+    game_5:
+        state: finished
+        playerLeft: '@user_1'
+        playerRight: '@user_2'
+        playRight: 'scissors'
+        playLeft: 'rock'
+        result: 'winRight'
+    game_6:
+        state: finished
+        playerLeft: '@user_1'
+        playerRight: '@user_2'
+        playRight: 'scissors'
+        playLeft: 'scissors'
+        result: 'draw'
+    

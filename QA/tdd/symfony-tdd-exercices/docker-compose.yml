@@ -1,0 +1,17 @@
+version: "3"
+services:
+  symfony-tdd-exercices:
+    container_name: symfony-tdd-exercices
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+      - HOST=0.0.0.0
+    ports:
+      - '8888:8000'
+    volumes:
+      - ./tdd-exercices/:/home/tdd-exercices:cached

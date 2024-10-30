@@ -1,0 +1,36 @@
+App\Entity\Car:
+    car_1:
+        brand: volkswagen
+        model: golf
+        engine: petrol
+        gearbox: automatic
+        category: compact
+        doorNumber: 5
+    car_2:
+        brand: peutgeot
+        model: 3008
+        engine: petrol
+        gearbox: automatic
+        category: suv
+        doorNumber: 5
+    car_3:
+        brand: nissan
+        model: gtr
+        engine: petrol
+        gearbox: manual
+        category: sport
+        doorNumber: 3
+    car_4:
+        brand: toyota
+        model: yaris
+        engine: hybrid
+        gearbox: automatic
+        category: compact
+        doorNumber: 5
+    car_5:
+        brand: toyota
+        model: supra
+        engine: petrol
+        gearbox: manual
+        category: sport
+        doorNumber: 3

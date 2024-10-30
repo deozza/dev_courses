@@ -1,0 +1,100 @@
+[
+  {
+    "id": 1,
+    "state": "pending",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": null,
+    "playLeft": null,
+    "playRight": null,
+    "result": null
+  },
+  {
+    "id": 2,
+    "state": "ongoing",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": {
+      "id": 2,
+      "name": "Jane",
+      "age": 22
+    },
+    "playLeft": null,
+    "playRight": null,
+    "result": null
+  },
+  {
+    "id": 3,
+    "state": "ongoing",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": {
+      "id": 2,
+      "name": "Jane",
+      "age": 22
+    },
+    "playLeft": "scissors",
+    "playRight": null,
+    "result": null
+  },
+  {
+    "id": 4,
+    "state": "finished",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": {
+      "id": 2,
+      "name": "Jane",
+      "age": 22
+    },
+    "playLeft": "paper",
+    "playRight": "scissors",
+    "result": "winLeft"
+  },
+  {
+    "id": 5,
+    "state": "finished",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": {
+      "id": 2,
+      "name": "Jane",
+      "age": 22
+    },
+    "playLeft": "rock",
+    "playRight": "scissors",
+    "result": "winRight"
+  },
+  {
+    "id": 6,
+    "state": "finished",
+    "playerLeft": {
+      "id": 1,
+      "name": "John",
+      "age": 25
+    },
+    "playerRight": {
+      "id": 2,
+      "name": "Jane",
+      "age": 22
+    },
+    "playLeft": "scissors",
+    "playRight": "scissors",
+    "result": "draw"
+  }
+]

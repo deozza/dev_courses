@@ -1,0 +1,35 @@
+version: "3"
+services:
+  symfony-blackjack:
+    container_name: symfony-blackjack
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+      - HOST=0.0.0.0
+    ports:
+      - '8888:8000'
+    volumes:
+      - ./symfony-blackjack/:/home/symfony-blackjack:cached
+
+  svelte-blackjack:
+    image: node:20
+    container_name: svelte-blackjack
+    volumes:
+      - ./svelte-blackjack/:/home/svelte-blackjack
+    working_dir: /home/svelte-blackjack
+    ports:
+      - 5173:5173
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+      - HOST=0.0.0.0
+    restart: unless-stopped
+    tty: true
+    depends_on:
+      - symfony-blackjack
